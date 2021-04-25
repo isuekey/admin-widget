@@ -1,11 +1,15 @@
 
-import CargoWithdraw from './withdraw/amap-route.vue';
+import FundTransfer from './fas/fundTransfer.vue';
 
 export function install(Vue) {
   if(install.installed) return;
   install.installed = true;
-  Vue.component('CargoWithdraw', CargoWithdraw);
+  Vue.component('FundTransfer', FundTransfer);
 }
+
+const fas = {
+  FundTransfer
+};
 
 const plugin = {
   install,
@@ -22,6 +26,6 @@ if (GlobalVue) {
   GlobalVue.use(plugin);
 }
 export {
-  CargoWithdraw
+  fas
 };
 

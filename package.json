@@ -14,7 +14,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "npm run build:umd & npm run build:es & npm run build:unpkg",
+    "build": "yarn build:umd; yarn build:es; yarn build:unpkg",
     "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/dayi-widget.umd.js",
     "build:es": "rollup --config build/rollup.config.js --format esm --file dist/dayi-widget.esm.js",
     "build:unpkg": "rollup --config build/rollup.config.js --format iife --file dist/dayi-widget.min.js"
@@ -22,11 +22,14 @@
   "devDependencies": {
     "@rollup/plugin-buble": "^0.21.3",
     "@rollup/plugin-commonjs": "^11.1.0",
+    "element-ui": "^2.15.1",
     "rollup": "^1.17.0",
     "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-vue": "^5.0.1",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10"
   },
-  "dependencies": {}
+  "dependencies": {
+    "simple-uuidv4": "^0.0.3"
+  }
 }
