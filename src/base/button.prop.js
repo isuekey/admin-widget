@@ -13,7 +13,7 @@ const buttonProps = {
   circle:Boolean,
   disabled:Boolean,
   icon:String,
-}
+};
 export default buttonProps;
 export {
   buttonProps

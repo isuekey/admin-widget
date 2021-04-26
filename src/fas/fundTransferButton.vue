@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loadingMask && loading" :class="buttonClass">
     <el-button 
-      :type="type":loading="buttonLoading" :size="size" 
+      :type="type" :loading="buttonLoading" :size="size" 
       :plain="plain" :round="round" :circle="circle"
       :disabled="disabled" :icon="icon"
       @click="handleButtonClick"
@@ -15,7 +15,8 @@ import { uuid } from 'simple-uuidv4';
 import fundTransferDialog from './fundTransferDialog.vue';
 import buttonProps from '../base/button.prop.js';
 
-const props = Object.assign({}, buttonProps, {
+const props = Object.assign({}, 
+  buttonProps, fundTransferDialog.props, {
   loadingMask:Boolean,
   buttonData:{
     type:Object, default(){ return {}; },
