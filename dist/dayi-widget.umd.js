@@ -4,8 +4,6 @@
   (global = global || self, factory(global.DayiWidget = {}, global.simpleUuidv4));
 }(this, (function (exports, simpleUuidv4) { 'use strict';
 
-  var base = ".display-inline-block {\n  display: inline-block;\n}";
-
   //
   //
   //
@@ -238,7 +236,8 @@
     loadingMask:Boolean,
     buttonData:{
       type:Object, default: function default$1(){ return {}; },
-    }
+    },
+    buttonClass:String,
   });
   var script$1 = {
     name: 'FundTransferButton',
@@ -281,7 +280,7 @@
             expression: "loadingMask && loading"
           }
         ],
-        staticClass: "display-inline-block"
+        class: _vm.buttonlClass
       },
       [
         _c(
@@ -378,7 +377,6 @@
 
   exports.fas = fas;
   exports.install = install;
-  exports.styles = base;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

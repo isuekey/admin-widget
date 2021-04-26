@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loadingMask && loading" class="display-inline-block">
+  <div v-loading="loadingMask && loading" :class="buttonlClass">
     <el-button 
       :type="type":loading="buttonLoading" :size="size" 
       :plain="plain" :round="round" :circle="circle"
@@ -19,7 +19,8 @@ const props = Object.assign({}, buttonProps, {
   loadingMask:Boolean,
   buttonData:{
     type:Object, default(){ return {}; },
-  }
+  },
+  buttonClass:String,
 });
 export default {
   name: 'FundTransferButton',

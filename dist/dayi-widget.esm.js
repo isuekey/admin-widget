@@ -1,7 +1,5 @@
 import { uuid } from 'simple-uuidv4';
 
-var base = ".display-inline-block {\n  display: inline-block;\n}";
-
 //
 //
 //
@@ -234,7 +232,8 @@ var props = Object.assign({}, buttonProps, {
   loadingMask:Boolean,
   buttonData:{
     type:Object, default: function default$1(){ return {}; },
-  }
+  },
+  buttonClass:String,
 });
 var script$1 = {
   name: 'FundTransferButton',
@@ -277,7 +276,7 @@ var __vue_render__$1 = function() {
           expression: "loadingMask && loading"
         }
       ],
-      staticClass: "display-inline-block"
+      class: _vm.buttonlClass
     },
     [
       _c(
@@ -372,4 +371,4 @@ if (GlobalVue) {
   GlobalVue.use(plugin);
 }
 
-export { fas, install, base as styles };
+export { fas, install };
