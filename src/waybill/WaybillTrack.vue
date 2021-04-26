@@ -1,6 +1,6 @@
 <template>
   <div class="track-amap-container" v-loading="meta.loading">
-    <div class="track-amap height-100p min-height-700" id="waybillTrackAmap" :trackInfo="trackInfo" :selectedPoint="selectedPoint"></div>
+    <div class="track-amap height-100p min-height-700" :id="meta.amapId" :trackInfo="trackInfo" :selectedPoint="selectedPoint"></div>
     <div class="driver-info" v-if="showDriverInfo">
       <div class="user-avatar">
         <img src="./assets/carrior_portrait.svg" alt />
@@ -44,6 +44,8 @@ import vehicleMarker from "./assets/vehicle-marker.png";
 import boatMarker from "./assets/boat-marker.png";
 import carriorPortrait from './assets/carrior_portrait.svg';
 
+import * as simpleUUIdv4 from 'simple-uuidv4';
+import * as mapUtils from './lib/map.utils.js';
 
 export default {
   name:'WaybillTrack',
@@ -53,13 +55,46 @@ export default {
     showDriverInfo: { type: Boolean, default: true, },
     driverInfo: { type: Object, default() { return {}; }, },
     showDriverTrack: { type: Boolean, default: true, },
+    amap: null,
+    loadPoint:Array,
+    unloadPoint:Array,
   },
   data(){
+    const uuid = simpleUUIdv4.uuid();
     return {
       meta: {
         loading: false,
-      }
+      },
+      amapId: uuid,
+      amapResolve: null,
+      containerResolve: null,
     } 
+  },
+  mounted() {
+    const vue = this;
+    if(!vue.amap) return;
+    if(!vue.amapResolve) {
+      vue.amapResolve = Promise.resolve(vue.amap);
+    }
+    vue.drawRoute();
+  },
+  update() {
+    const vue = this;
+    if(!vue.amap) return;
+    if(!vue.amapResolve) {
+      vue.amapResolve = Promise.resolve(vue.amap);
+    }
+    vue.drawRoute();
+  },
+  methods: {
+    drawRoute() {
+      const vue = this;
+      mapUtils.renderTheRoute(vue).then(ok => {
+        vue.$emit('drawRoute', ok);
+      }).catch(err=>{
+        console.log(err);
+      });
+    }
   }
 }
 </script>
