@@ -3,7 +3,7 @@
     <div class="track-amap height-100p min-height-700" id="waybillTrackAmap" :trackInfo="trackInfo" :selectedPoint="selectedPoint"></div>
     <div class="driver-info" v-if="showDriverInfo">
       <div class="user-avatar">
-        <img src="../../../../assets/carrior_portrait.svg" alt />
+        <img src="./assets/carrior_portrait.svg" alt />
       </div>
       <div class="user-info">
         <span class="user-name">{{driverInfo.driverName}}</span>
