@@ -4,6 +4,7 @@ import FundTransferDialog from './fas/fundTransferDialog.vue';
 
 import AmapRoute from './waybill/amap-route.vue';
 import WaybillTrack from './waybill/WaybillTrack.vue';
+import * as mapUtils from './waybill/lib/map.utils.js';
 
 export function install(Vue) {
   if(install.installed) return;
@@ -40,5 +41,6 @@ if (GlobalVue) {
 export {
   fas,
   waybill,
+  mapUtils,
 };
 

@@ -25,7 +25,7 @@ export default {
     unloadRule:Function,
     amap:null,
     avoid:{
-      type:Array, default(){return [20, 20, 20, 20]; },
+      type:Array, default(){return [10, 10, 10, 10]; },
     }
   },
   data(){
@@ -56,7 +56,7 @@ export default {
   methods: {
     drawRoute() {
       const vue = this;
-      mapUtils.renderTheRoute(vue).then(ok => {
+      mapUtils.loadUnload.renderTheRoute(vue).then(ok => {
         vue.$emit('drawRoute', ok);
       }).catch(err=>{
         console.log(err);

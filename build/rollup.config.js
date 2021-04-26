@@ -4,6 +4,7 @@ import vuePlugin from 'rollup-plugin-vue';
 import buble from '@rollup/plugin-buble';
 import image from '@rollup/plugin-image';
 import css from 'rollup-plugin-import-css';
+import { uglify } from 'rollup-plugin-uglify';
 
 
 export default {
@@ -21,5 +22,6 @@ export default {
       compileTemplate:true,
     }),
     buble(),
+    uglify(),
   ],
 };

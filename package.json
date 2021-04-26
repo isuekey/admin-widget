@@ -26,6 +26,7 @@
     "element-ui": "^2.15.1",
     "rollup": "^1.17.0",
     "rollup-plugin-import-css": "^2.0.1",
+    "rollup-plugin-uglify": "^6.0.4",
     "rollup-plugin-vue": "^5.0.1",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10"
