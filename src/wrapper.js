@@ -2,16 +2,25 @@
 import FundTransferButton from './fas/fundTransferButton.vue';
 import FundTransferDialog from './fas/fundTransferDialog.vue';
 
+import AmapRoute from './waybill/amap-route.vue';
+import WaybillTrack from './waybill/WaybillTrack.vue';
+
 export function install(Vue) {
   if(install.installed) return;
   install.installed = true;
   Vue.component('FundTransferButton', FundTransferButton);
   Vue.component('FundTransferDialog', FundTransferDialog);
+  Vue.component('AmapRoute', AmapRoute);
+  Vue.component('WaybillTrack', WaybillTrack);
 }
 
 const fas = {
   FundTransferButton,
   FundTransferDialog,
+};
+const waybill = {
+  AmapRoute,
+  WaybillTrack,
 };
 
 const plugin = {
@@ -30,5 +39,6 @@ if (GlobalVue) {
 }
 export {
   fas,
+  waybill,
 };
 
