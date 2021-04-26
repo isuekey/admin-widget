@@ -1,6 +1,6 @@
 <template>
   <div class="track-amap-container" v-loading="meta.loading">
-    <div class="track-amap height-100p min-height-700" :id="meta.amapId" :trackInfo="trackInfo" :selectedPoint="selectedPoint"></div>
+    <div class="track-amap height-100p min-height-700" :id="amapId" :trackInfo="trackInfo" :selectedPoint="selectedPoint"></div>
     <div class="driver-info" v-if="showDriverInfo">
       <div class="user-avatar">
         <img src="./assets/carrior_portrait.svg" alt />
@@ -89,6 +89,7 @@ export default {
   methods: {
     drawRoute() {
       const vue = this;
+      console.log(vue);
       mapUtils.renderTheRoute(vue).then(ok => {
         vue.$emit('drawRoute', ok);
       }).catch(err=>{
