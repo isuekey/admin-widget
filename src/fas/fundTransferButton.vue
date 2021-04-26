@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loadingMask && loading" :class="buttonlClass">
+  <div v-loading="loadingMask && loading" :class="buttonClass">
     <el-button 
       :type="type":loading="buttonLoading" :size="size" 
       :plain="plain" :round="round" :circle="circle"

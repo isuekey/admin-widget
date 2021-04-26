@@ -276,7 +276,7 @@ var __vue_render__$1 = function() {
           expression: "loadingMask && loading"
         }
       ],
-      class: _vm.buttonlClass
+      class: _vm.buttonClass
     },
     [
       _c(

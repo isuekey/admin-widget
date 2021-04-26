@@ -280,7 +280,7 @@
             expression: "loadingMask && loading"
           }
         ],
-        class: _vm.buttonlClass
+        class: _vm.buttonClass
       },
       [
         _c(
