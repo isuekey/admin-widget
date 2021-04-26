@@ -1,11 +1,11 @@
 <template>
   <div v-loading="loadingMask && loading" class="display-inline-block">
     <el-button 
-      :type="type" :label="label" :loading="buttonLoading" 
-      :size="size" :plain="plain" :round="round" :circle="circle"
+      :type="type":loading="buttonLoading" :size="size" 
+      :plain="plain" :round="round" :circle="circle"
       :disabled="disabled" :icon="icon"
       @click="handleButtonClick"
-      />
+      >{{label}}</el-button>
     <fund-transfer-dialog :showDialog.sync="showDialog" />
   </div>
 </template>
@@ -14,7 +14,6 @@
 import { uuid } from 'simple-uuidv4';
 import fundTransferDialog from './fundTransferDialog.vue';
 import buttonProps from '../base/button.prop.js';
-import '../base/base.css';
 
 const props = Object.assign({}, buttonProps, {
   loadingMask:Boolean,

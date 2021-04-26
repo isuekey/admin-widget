@@ -1,4 +1,6 @@
 
+import styles from './base/base.css';
+
 import FundTransferButton from './fas/fundTransferButton.vue';
 import FundTransferDialog from './fas/fundTransferDialog.vue';
 
@@ -29,6 +31,7 @@ if (GlobalVue) {
   GlobalVue.use(plugin);
 }
 export {
-  fas
+  fas,
+  styles,
 };
 

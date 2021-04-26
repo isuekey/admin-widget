@@ -1,5 +1,7 @@
 import { uuid } from 'simple-uuidv4';
 
+var base = ".display-inline-block {\n  display: inline-block;\n}";
+
 //
 //
 //
@@ -278,20 +280,23 @@ var __vue_render__$1 = function() {
       staticClass: "display-inline-block"
     },
     [
-      _c("el-button", {
-        attrs: {
-          type: _vm.type,
-          label: _vm.label,
-          loading: _vm.buttonLoading,
-          size: _vm.size,
-          plain: _vm.plain,
-          round: _vm.round,
-          circle: _vm.circle,
-          disabled: _vm.disabled,
-          icon: _vm.icon
+      _c(
+        "el-button",
+        {
+          attrs: {
+            type: _vm.type,
+            loading: _vm.buttonLoading,
+            size: _vm.size,
+            plain: _vm.plain,
+            round: _vm.round,
+            circle: _vm.circle,
+            disabled: _vm.disabled,
+            icon: _vm.icon
+          },
+          on: { click: _vm.handleButtonClick }
         },
-        on: { click: _vm.handleButtonClick }
-      }),
+        [_vm._v(_vm._s(_vm.label))]
+      ),
       _vm._v(" "),
       _c("fund-transfer-dialog", {
         attrs: { showDialog: _vm.showDialog },
@@ -367,4 +372,4 @@ if (GlobalVue) {
   GlobalVue.use(plugin);
 }
 
-export { fas, install };
+export { fas, install, base as styles };
