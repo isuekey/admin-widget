@@ -1,14 +1,17 @@
 
-import FundTransfer from './fas/fundTransfer.vue';
+import FundTransferButton from './fas/fundTransferButton.vue';
+import FundTransferDialog from './fas/fundTransferDialog.vue';
 
 export function install(Vue) {
   if(install.installed) return;
   install.installed = true;
-  Vue.component('FundTransfer', FundTransfer);
+  Vue.component('FundTransferButton', FundTransferButton);
+  Vue.component('FundTransferDialog', FundTransferDialog);
 }
 
 const fas = {
-  FundTransfer
+  FundTransferButton,
+  FundTransferDialog,
 };
 
 const plugin = {

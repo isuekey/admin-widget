@@ -3,6 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import vuePlugin from 'rollup-plugin-vue';
 import buble from '@rollup/plugin-buble';
 import svg from 'rollup-plugin-svg';
+import css from 'rollup-plugin-import-css';
 
 
 export default {
@@ -12,6 +13,7 @@ export default {
     exports: 'named',
   },
   plugins:[
+    css(),
     svg(),
     commonjs(),
     vuePlugin({
