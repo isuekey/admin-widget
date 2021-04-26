@@ -1,6 +1,6 @@
 {
   "name": "dayi-admin-widget",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "基于el-ui处理的vue组件库",
   "main": "dist/dayi-widget.umd.js",
   "module": "dist/dayi-widget.esm.js",
@@ -24,6 +24,7 @@
     "@rollup/plugin-commonjs": "^11.1.0",
     "element-ui": "^2.15.1",
     "rollup": "^1.17.0",
+    "rollup-plugin-import-css": "^2.0.1",
     "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-vue": "^5.0.1",
     "vue": "^2.6.10",
