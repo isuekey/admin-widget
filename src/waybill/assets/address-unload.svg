@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="56px" height="56px" viewBox="0 0 56 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>编组 10</title>
+  <g id="2020.04.03--地图优化" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="A4-1--2-运单轨迹-实时轨迹" transform="translate(-331.000000, -1026.000000)">
+      <g id="编组-10" transform="translate(331.476117, 1026.748301)">
+        <path d="M3.02083333,25.0568182 C1.36397908,25.0568182 0.0208333333,23.7136724 0.0208333333,22.0568182 L0.0208333333,3 C0.0208333333,1.34314575 1.36397908,-1.53269159e-12 3.02083333,-1.53299595e-12 L52.1458333,-1.53299595e-12 C53.8026876,-1.53330031e-12 55.1458333,1.34314575 55.1458333,3 L55.1458333,22.0568182 C55.1458333,23.7136724 53.8026876,25.0568182 52.1458333,25.0568182 L32.5265152,25.0568182 L27.5833333,30 L22.6401515,25.0568182 L3.02083333,25.0568182 Z" id="形状结合" fill="#E02020"></path>
+        <text id="卸货地" font-family="PingFang-SC-Heavy, PingFang SC" font-size="14" font-weight="600" line-spacing="13" letter-spacing="-1.07692308" fill="#FFFFFF">
+          <tspan x="8.08333333" y="16.5284091">卸货地</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+  <g id="2020.04.03--地图优化" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="A4-1--2-运单轨迹-实时轨迹" transform="translate(-348.000000, -1060.000000)" fill-rule="nonzero">
+      <g id="编组-40" transform="translate(348.000000, 1060.000000)">
+        <circle id="22" fill="#FFA6A6" cx="28" cy="45" r="11"></circle>
+        <circle id="椭圆形备份-12" fill="#E02020" cx="28" cy="45" r="6"></circle>
+      </g>
+    </g>
+  </g>
+</svg>
