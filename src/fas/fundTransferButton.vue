@@ -1,6 +1,11 @@
 <template>
   <div v-loading="loadingMask && loading" class="display-inline-block">
-    <el-button v-bind="buttonConfig" :loading="buttonLoading" @click="handleButtonClick"/>
+    <el-button 
+      :type="type" :label="label" :loading="buttonLoading" 
+      :size="size" :plain="plain" :round="round" :circle="circle"
+      :disabled="disabled" :icon="icon"
+      @click="handleButtonClick"
+      />
     <fund-transfer-dialog :showDialog.sync="showDialog" />
   </div>
 </template>

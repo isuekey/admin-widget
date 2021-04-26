@@ -20,7 +20,7 @@ var script = {
       },
       set: function set(val) {
         var vue = this;
-        vue.$emint('update:showDialog', val);
+        vue.$emit('update:showDialog', val);
       },
     }
   }
@@ -181,7 +181,7 @@ __vue_render__._withStripped = true;
   /* style */
   var __vue_inject_styles__ = function (inject) {
     if (!inject) { return }
-    inject("data-v-509f5c24_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", map: {"version":3,"sources":[],"names":[],"mappings":"","file":"fundTransferDialog.vue"}, media: undefined });
+    inject("data-v-ac0fea90_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", map: {"version":3,"sources":[],"names":[],"mappings":"","file":"fundTransferDialog.vue"}, media: undefined });
 
   };
   /* scoped */
@@ -209,24 +209,38 @@ __vue_render__._withStripped = true;
     undefined
   );
 
+var buttonProps = {
+  type:{
+    type:String, default:'text'
+  },
+  label: {
+    type:String, default:'按钮', required:true,
+  },
+  size: {
+    type:String, default:'small'
+  },
+  plain:Boolean,
+  round:Boolean,
+  circle:Boolean,
+  disabled:Boolean,
+  icon:String,
+};
+
 //
 
+var props = Object.assign({}, buttonProps, {
+  loadingMask:Boolean,
+  buttonData:{
+    type:Object, default: function default$1(){ return {}; },
+  }
+});
 var script$1 = {
   name: 'FundTransferButton',
   uuid: uuid(),
   components: {
     fundTransferDialog: __vue_component__,
   },
-  props: {
-    buttonConfig:{
-      type:Object,
-      default: function default$1(){ return {}; },
-    },
-    loadingMask:Boolean,
-    buttonData:{
-      type:Object, default: function default$2(){ return {}; },
-    }
-  },
+  props: props,
   data: function data() {
     return {
       loadig:false,
