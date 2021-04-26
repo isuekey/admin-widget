@@ -30,7 +30,7 @@ const defaultLoadRule = (distance=0)=>{
     fillOpacity: 0.5, //填充透明度
     strokeOpacity: 0.5 //线透明度
   };
-  // console.log('loadPointMarker', loadPointMarker);
+  console.log('loadPointMarker', loadPointMarker);
   const marker = {
     image: URL.createObjectURL(new Blob([loadPointMarker], {type:'image/svg+xml'})),
     size:[56, 56],
@@ -46,7 +46,7 @@ const defaultUnloadRule = (distance=0) => {
     fillOpacity: 0.5, //填充透明度
     strokeOpacity: 0.5 //线透明度
   };
-  // console.log('unloadPointMarker', unloadPointMarker);
+  console.log('unloadPointMarker', unloadPointMarker);
   const marker = {
     image: URL.createObjectURL(new Blob([unloadPointMarker], {type:'image/svg+xml'})),
     size:[56, 56],
