@@ -235,11 +235,19 @@ export default {
       switch(type) {
       case "driver":
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin == mapUtils.base.glossary.pointType.app)).then((paths) => {
-          return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType);
+          if(paths.length) {
+            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType);
+          } else {
+            return mapUtils.tracking.hideInfoWindow(vue);
+          }
         });
       case "vehicle":
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin != mapUtils.base.glossary.pointType.app)).then((paths) => {
-          return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType);
+          if (paths.length) {
+            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType);            
+          } else {
+            return mapUtils.tracking.hideInfoWindow(vue);
+          }
         });
       };
     }
