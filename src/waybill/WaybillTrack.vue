@@ -132,7 +132,7 @@ export default {
       }).then(([ok, startPoint, endPoint]) => {
         vue.drawTrackPath(startPoint, endPoint);
       }).then(ok => {
-        console.log('selectedPoint', vue.selectedPoint);
+        // console.log('selectedPoint', vue.selectedPoint);
         if(!vue.selectedPoint) return mapUtils.tracking.hideInfoWindow(vue);
         return mapUtils.tracking.showInfoWindowOfPoint(vue, vue.selectedPoint);
       }).catch(err=>{
@@ -236,7 +236,7 @@ export default {
       case "driver":
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin == mapUtils.base.glossary.pointType.app)).then((paths) => {
           if(paths.length) {
-            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType);
+            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType, true);
           } else {
             return mapUtils.tracking.hideInfoWindow(vue);
           }
@@ -244,7 +244,7 @@ export default {
       case "vehicle":
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin != mapUtils.base.glossary.pointType.app)).then((paths) => {
           if (paths.length) {
-            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType);            
+            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType, true);            
           } else {
             return mapUtils.tracking.hideInfoWindow(vue);
           }

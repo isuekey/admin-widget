@@ -314,7 +314,7 @@ const newInfoWindow = (vue, trackPoint) => {
     return [infoWindow, amap, container];
   });
 };
-const moveLorryTo = (vue, passPointArray=[], type="lorry") => {
+const moveLorryTo = (vue, passPointArray=[], type="lorry", emit=false) => {
   const lastPointArray = passPointArray.reverse();
   return prepareLorryMarker(vue, lastPointArray, type).then(([lorryMarker, amap, container, position]) => {
     // console.log('lorry marker move', lorryMarker, lorryMap.has(vue.amapResolve));
@@ -323,6 +323,7 @@ const moveLorryTo = (vue, passPointArray=[], type="lorry") => {
     const lastPoint = lastPointArray[0];
     if(!lastPoint) return lorryMarker;
     lorryMarker.setPosition(position);
+    if(emit){vue.$emit('clickPoint', lastPoint)}
     newInfoWindow(vue, lastPoint).then(([infoWindow, amap, container]) =>{
       if(!infoWindow.getIsOpen()){
         infoWindow.open(container, position);
