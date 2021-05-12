@@ -59,6 +59,7 @@ export default {
     vehicleType:{ type:String, default:'lorry', },
     moveTriggerInfoWindow:{ type:Boolean, default: true, },
     isRunning:{ type:Boolean, default:false, },
+    emitLastPosition:Boolean,
   },
   data(){
     const uuid = simpleUUIdv4.uuid();
@@ -236,7 +237,7 @@ export default {
       case "driver":
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin == mapUtils.base.glossary.pointType.app)).then((paths) => {
           if(paths.length) {
-            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType, true);
+            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType, vue.emitLastPosition);
           } else {
             return mapUtils.tracking.hideInfoWindow(vue);
           }
@@ -244,7 +245,7 @@ export default {
       case "vehicle":
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin != mapUtils.base.glossary.pointType.app)).then((paths) => {
           if (paths.length) {
-            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType, true);            
+            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType, vue.emitLastPosition);            
           } else {
             return mapUtils.tracking.hideInfoWindow(vue);
           }
