@@ -144,7 +144,7 @@ export default {
       const vue = this;
       const trackPath =  vue.trackPath;
       const copy = vue.trackInfo && vue.trackInfo.realtime.slice() || [];
-      const realtime = [endPoint].concat(copy).concat([startPoint]).reverse();
+      const realtime = [endPoint].concat(copy).concat([startPoint]).filter(ele => !!ele).reverse();
       const drawTrackPathHandle = (pathArray, pathColor, category="lines") => {
         return mapUtils.tracking.getValidPathArray(vue, pathArray).then((paths) => {
           const trackParts = mapUtils.tracking.getTrackParts(paths);
