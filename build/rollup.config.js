@@ -22,6 +22,6 @@ export default {
       compileTemplate:true,
     }),
     buble(),
-    uglify(),
+    // uglify(),
   ],
 };
