@@ -30,9 +30,10 @@ const confirmAmap = (vue) => {
     return Promise.all([vue.amapResolve, vue.containerResolve]);
   });
 };
+const globaTrackMap = new WeakMap();
 const removeTrackLine = (vue, category='lines') => {
   return confirmAmap(vue).then(([amap, container]) => {
-    const markerMap = globalMarkerMap.get(vue.amapResolve) || {};
+    const markerMap = globaTrackMap.get(vue.amapResolve) || {};
     markerMap[category] = markerMap[category] || [];
     markerMap[category].forEach(line => container.remove(line));
     markerMap[category] = [];
@@ -40,8 +41,8 @@ const removeTrackLine = (vue, category='lines') => {
 };
 const drawTrackLine = (vue, trackPartList, color="#2288ff", category='lines') => {
   return confirmAmap(vue).then(([amap, container]) => {
-    const markerMap = globalMarkerMap.get(vue.amapResolve) || {};
-    globalMarkerMap.set(vue.amapResolve, markerMap);
+    const markerMap = globaTrackMap.get(vue.amapResolve) || {};
+    globaTrackMap.set(vue.amapResolve, markerMap);
     markerMap[category] = markerMap[category] || [];
     markerMap[category].forEach(line => container.remove(line));
     const trackLineList = trackPartList.map((trackPart, idx) => {
@@ -61,15 +62,6 @@ const drawTrackLine = (vue, trackPartList, color="#2288ff", category='lines') =>
 };
 
 const globalMarkerMap = new WeakMap();
-const clearPartMakerList = (map={}, container, pathList=[]) => {
-  pathList.filter(ele => {
-    const key = ele.key || mapBase.getKeyOfPoint([ele.lng, ele.lat]);
-    return !!map[key]
-  }).forEach(ele => {
-    const key = ele.key || mapBase.getKeyOfPoint([ele.lng, ele.lat]);
-    container.remove(map[key]);
-  });
-};
 const pointType = mapBase.glossary.pointType;
 const loadPointIconSetting = {
   pass: {
@@ -157,13 +149,14 @@ const drawPassPointMarker = (map={}, trackEle, amap, container, vue, still=false
   });
   return newTrackMarker;
 };
-const drawTrackPassPoint = (vue, trackPartList) => {
+const drawTrackPassPoint = (vue, trackPartList, category="lines") => {
   return confirmAmap(vue).then(([amap, container]) => {
     const markerMap = globalMarkerMap.get(vue.amapResolve) || {};
     globalMarkerMap.set(vue.amapResolve, markerMap);
+    const categoryMarkerMap = markerMap[category] = markerMap[category] || {};
+    clearPartMakerList(categoryMarkerMap, container);
     const passPointList = trackPartList.map((trackPart=[], idx) => {
       const validTrack = trackPart.filter(ele => ele.lng && ele.lat);
-      clearPartMakerList(markerMap, container, trackPart);
       let drawTrack = [];
       const resolution = container.getResolution();
       const pathLength = amap.GeometryUtil.distanceOfLine(validTrack.map(ele => [ele.lng, ele.lat]));
@@ -172,7 +165,7 @@ const drawTrackPassPoint = (vue, trackPartList) => {
       let step = Math.floor(trackLength / points) || 1;
       drawTrack = validTrack.filter((ele, idx) => idx % step == 0);
       return drawTrack.map(trackEle => {
-        const newTrackMarker = drawPassPointMarker(markerMap, trackEle, amap, container, vue);
+        const newTrackMarker = drawPassPointMarker(categoryMarkerMap, trackEle, amap, container, vue);
         container.add(newTrackMarker);
         return newTrackMarker;
       });
@@ -181,6 +174,20 @@ const drawTrackPassPoint = (vue, trackPartList) => {
     return passPointList;
   })
 };
+const clearPartMakerList = (map={}, container) => {
+  return Object.entries(map).filter(([_,marker]) => !!marker).forEach(([key, marker]) => {
+    container.remove(marker);
+    delete map[key];
+  });
+};
+const removePassPoint = (vue, category='lines') => {
+  return confirmAmap(vue).then(([amap, container]) => {
+    const markerMap = globalMarkerMap.get(vue.amapResolve) || {};
+    globalMarkerMap.set(vue.amapResolve, markerMap);
+    const categoryMarkerMap = markerMap[category] = markerMap[category] || {};
+    return clearPartMakerList(categoryMarkerMap, container);
+  });
+}
 const getDistance = (point, prePoint, amap) => {
   if (!prePoint) return 0;
   const distance = amap.GeometryUtil.distance(
@@ -365,4 +372,5 @@ export {
   moveLorryTo,
   showInfoWindowOfPoint,
   hideInfoWindow,
+  removePassPoint,
 }

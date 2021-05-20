@@ -149,14 +149,15 @@ export default {
         return mapUtils.tracking.getValidPathArray(vue, pathArray).then((paths) => {
           const trackParts = mapUtils.tracking.getTrackParts(paths);
           mapUtils.tracking.drawTrackLine(vue, trackParts, pathColor, category);
-          mapUtils.tracking.drawTrackPassPoint(vue, trackParts);
+          mapUtils.tracking.drawTrackPassPoint(vue, trackParts, category);
         });
       };
       if ((vue.showUnionTrack || vue.showDriverTrack)) {
         if(vue.driverActive) {
-          trackPath.driver = drawTrackPathHandle(realtime.filter(ele=> ele.origin == mapUtils.base.glossary.pointType.app), vue.trackDriverColor, 'driver'); 
+          trackPath.driver = drawTrackPathHandle(realtime.filter(ele=> ele.origin == mapUtils.base.glossary.pointType.app), vue.trackDriverColor, 'driver');
         } else {
           mapUtils.tracking.removeTrackLine(vue, 'driver');
+          mapUtils.tracking.removePassPoint(vue, 'driver');
         }
       };
       if ((vue.showUnionTrack || vue.showVehicleTrack)) {
@@ -164,6 +165,7 @@ export default {
           trackPath.vehicle = drawTrackPathHandle(realtime.filter(ele=> ele.origin != mapUtils.base.glossary.pointType.app), vue.trackVehicleColor, 'vehicle');
         } else {
           mapUtils.tracking.removeTrackLine(vue, 'vehicle');
+          mapUtils.tracking.removePassPoint(vue, 'vehicle');
         }
       };
       return Promise.all([trackPath.all, trackPath.driver, trackPath.vehicle]);
