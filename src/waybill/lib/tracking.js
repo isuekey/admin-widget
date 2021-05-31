@@ -96,30 +96,34 @@ const loadPointIconSetting = {
   }
 }
 const drawPassPointMarker = (map={}, trackEle, amap, container, vue, still=false) => {
-  const poinIcon = new amap.Icon({
+  const pointIcon = new amap.Icon({
     image: loadPointIconSetting.pass[trackEle.origin],
     size: new amap.Size(12, 12),
     imageSize: new amap.Size(12, 12),
   });
-  const poinIconOver = new amap.Icon({
+  const pointIconOver = new amap.Icon({
     image: loadPointIconSetting.passOver[trackEle.origin],
     size: new amap.Size(20, 20),
-    imageSize: new amap.Size(20, 20)
+    imageSize: new amap.Size(20, 20),
   });
+  // if(trackEle.isDangerous) {
+  //   pointIcon.image = loadPointIconSetting.pass[6];
+  //   pointIconOver.image = loadPointIconSetting.passOver[6];
+  // }
   const position = [trackEle.lng, trackEle.lat];
   const newTrackMarker = new amap.Marker({
     position: [trackEle.lng, trackEle.lat],
-    icon: poinIcon,
+    icon: pointIcon,
     bubble: true,
     offset: new amap.Pixel(-6, -6)
   });
   const key = trackEle.key || mapBase.getKeyOfPoint(position);
   map[key] = newTrackMarker;
   newTrackMarker.trackInfo = trackEle;
-  newTrackMarker.setIcon(poinIcon);
+  // newTrackMarker.setIcon(pointIcon);
   // const infoWindow = drawInfoWindow(trackEle, amap, vue);
   newTrackMarker.on("mouseover", event => {
-    newTrackMarker.setIcon(poinIconOver);
+    newTrackMarker.setIcon(pointIconOver);
     newTrackMarker.setOffset(new amap.Pixel(-10, -10));
     vue.focusedPoint = trackEle;
     newInfoWindow(vue, trackEle).then(([infoWindow, amap, container])=>{
@@ -133,7 +137,7 @@ const drawPassPointMarker = (map={}, trackEle, amap, container, vue, still=false
     // vue.onShowPointerInfoWindow = true;
   });
   newTrackMarker.on("mouseout", event => {
-    newTrackMarker.setIcon(poinIcon);
+    newTrackMarker.setIcon(pointIcon);
     newTrackMarker.setOffset(new amap.Pixel(-6, -6));
     vue.focusedPoint = null;
     newInfoWindow(vue, trackEle).then(([infoWindow, amap, container]) => {
@@ -162,8 +166,9 @@ const drawTrackPassPoint = (vue, trackPartList, category="lines") => {
       const pathLength = amap.GeometryUtil.distanceOfLine(validTrack.map(ele => [ele.lng, ele.lat]));
       const points = Math.floor(pathLength / (resolution * 30)) || 1;
       const trackLength = validTrack.length;
+      const lastIndex = trackLength - 1;
       let step = Math.floor(trackLength / points) || 1;
-      drawTrack = validTrack.filter((ele, idx) => idx % step == 0);
+      drawTrack = validTrack.filter((ele, idx) => idx % step == 0 || idx == lastIndex || ele.isDangerous);
       return drawTrack.map(trackEle => {
         const newTrackMarker = drawPassPointMarker(categoryMarkerMap, trackEle, amap, container, vue);
         container.add(newTrackMarker);
