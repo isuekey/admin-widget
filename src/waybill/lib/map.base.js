@@ -52,7 +52,7 @@ const setKeyOfPointGenerator = (other=keyOfPointHandler.defaultKeyOfPoint) => {
   keyOfPointHandler.handler = other;
 };
 setKeyOfPointGenerator();
-const getKeyOfPoint = (point, prefix, suffix, )=>{
+const getKeyOfPoint = (point, prefix, suffix ) => {
   return keyOfPointHandler.handler(point, prefix, suffix);
 };
 export {

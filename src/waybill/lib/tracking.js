@@ -177,7 +177,7 @@ const drawTrackPassPoint = (vue, trackPartList, category="lines") => {
   
     });
     return passPointList;
-  })
+  });
 };
 const clearPartMakerList = (map={}, container) => {
   return Object.entries(map).filter(([_,marker]) => !!marker).forEach(([key, marker]) => {
@@ -192,7 +192,7 @@ const removePassPoint = (vue, category='lines') => {
     const categoryMarkerMap = markerMap[category] = markerMap[category] || {};
     return clearPartMakerList(categoryMarkerMap, container);
   });
-}
+};
 const getDistance = (point, prePoint, amap) => {
   if (!prePoint) return 0;
   const distance = amap.GeometryUtil.distance(
@@ -219,7 +219,7 @@ const getValidPathArray = (vue, passPointArray=[], isAscend=1) => {
         trackDistance: getDistance(ele, arr[idx - 1], amap)
       });
     });
-    return validPassPointArray
+    return validPassPointArray;
   });
 };
 const shinningMap = new WeakMap();

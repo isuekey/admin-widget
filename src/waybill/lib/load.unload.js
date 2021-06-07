@@ -25,7 +25,7 @@ const pointRule = (distance=0, circleOption, marker) => {
     ];
   };
   
-}
+};
 const defaultLoadRule = (distance=0)=>{
   const circleOption={
     fillColor: "#37A80040",
@@ -66,11 +66,11 @@ const getKeyOfPoint = mapBase.getKeyOfPoint;
 const drawDistrict = (amap, container, point, options={}) => {
   const key = getKeyOfPoint(point);
   return new Promise((resolve, reject) => {
-    new amap.Geocoder().getAddress(new amap.LngLat(...point), (status, result) => {
+    return new amap.Geocoder().getAddress(new amap.LngLat(...point), (status, result) => {
       const isSuccess = status == 'complete' && result.info== 'OK';
       if (!isSuccess) return reject('unknown district,' + point);
       let code = result.regeocode.addressComponent[codeMap[options.type]];
-      new amap.DistrictSearch({
+      return new amap.DistrictSearch({
         level:options.type, extensions:'all', subdistrict:0,
       }).search(code, (status, result)=>{
         if(status!='complete') return Promise.reject('unknown district,'+code);
@@ -88,7 +88,7 @@ const drawDistrict = (amap, container, point, options={}) => {
         const polygon = new amap.Polygon(districtOption);
         districtMap[key] = polygon;
         // console.log("boundPoints", boundPoints, bounds);
-        resolve(polygon);
+        return resolve(polygon);
       });
     });
   });
@@ -131,7 +131,7 @@ const drawMarker = (amap, container, point, options={},prefix="") => {
   markerMap[key] = pointMarker;
   container.add(pointMarker);
   return pointMarker;
-}
+};
 const drawPoint = (amap, container, point, pointRule, distance) => {
   const drawTask = pointRule(distance).map(ruleOptions => {
     switch(ruleOptions.type) {
@@ -160,21 +160,18 @@ const renderTheRoute = (vue) => {
   }).then(([amap, container]) => {
     const ld = (vue.loadPoint || vue.unloadPoint || tian_an_men).slice();
     const un = (vue.unloadPoint || vue.loadPoint || tian_an_men).slice();
-    const distance = amap.GeometryUtil.distance(ld, un);
-    const drawLoad = vue.loadPoint && drawPoint(amap, container, vue.loadPoint.slice(), vue.loadRule || defaultLoadRule, distance) || [loadPoint, loadPoint];
-    const drawUnload = vue.unloadPoint && drawPoint(amap, container, vue.unloadPoint.slice(), vue.unloadRule || defaultUnloadRule, distance) || [unloadPoint, unloadPoint];
+    const distance = (vue.trackInfo && vue.trackInfo.planDistance) || amap.GeometryUtil.distance(ld, un);
+    const drawLoad = vue.loadPoint && drawPoint(amap, container, vue.loadPoint.slice(), vue.loadRule || defaultLoadRule, distance) || [void 0, void 0];
+    const drawUnload = vue.unloadPoint && drawPoint(amap, container, vue.unloadPoint.slice(), vue.unloadRule || defaultUnloadRule, distance) || [void 0, void 0];
     return Promise.all([amap, container, drawLoad, drawUnload]);
   }).then(([amap, container])=> {
     return zoomMap(amap, container, vue.avoid);
   });
 };
 
-const renderTheAction = (
-vue, 
-startPoint={},
-endPoint={}) => {
+const renderTheAction = (vue, startPoint={}, endPoint={}) => {
   return mapBase.prepareMap(vue).then(ok => {
-    return Promise.all([vue.amapResolve, vue.containerResolve])
+    return Promise.all([vue.amapResolve, vue.containerResolve]);
   }).then(([amap, container]) => {
     const actionMarker = {};
     if(!!startPoint.lng && !!startPoint.lat) {
