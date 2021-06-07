@@ -677,7 +677,7 @@ var setKeyOfPointGenerator = function (other) {
   keyOfPointHandler.handler = other;
 };
 setKeyOfPointGenerator();
-var getKeyOfPoint = function (point, prefix, suffix ){
+var getKeyOfPoint = function (point, prefix, suffix ) {
   return keyOfPointHandler.handler(point, prefix, suffix);
 };
 
@@ -759,11 +759,11 @@ var drawDistrict = function (amap, container, point, options) {
 
   var key = getKeyOfPoint$1(point);
   return new Promise(function (resolve, reject) {
-    new amap.Geocoder().getAddress(new (Function.prototype.bind.apply( amap.LngLat, [ null ].concat( point) )), function (status, result) {
+    return new amap.Geocoder().getAddress(new (Function.prototype.bind.apply( amap.LngLat, [ null ].concat( point) )), function (status, result) {
       var isSuccess = status == 'complete' && result.info== 'OK';
       if (!isSuccess) { return reject('unknown district,' + point); }
       var code = result.regeocode.addressComponent[codeMap[options.type]];
-      new amap.DistrictSearch({
+      return new amap.DistrictSearch({
         level:options.type, extensions:'all', subdistrict:0,
       }).search(code, function (status, result){
         if(status!='complete') { return Promise.reject('unknown district,'+code); }
@@ -781,7 +781,7 @@ var drawDistrict = function (amap, container, point, options) {
         var polygon = new amap.Polygon(districtOption);
         districtMap[key] = polygon;
         // console.log("boundPoints", boundPoints, bounds);
-        resolve(polygon);
+        return resolve(polygon);
       });
     });
   });
@@ -865,9 +865,10 @@ var renderTheRoute = function (vue) {
 
     var ld = (vue.loadPoint || vue.unloadPoint || tian_an_men$1).slice();
     var un = (vue.unloadPoint || vue.loadPoint || tian_an_men$1).slice();
-    var distance = amap.GeometryUtil.distance(ld, un);
-    var drawLoad = vue.loadPoint && drawPoint(amap, container, vue.loadPoint.slice(), vue.loadRule || defaultLoadRule, distance) || [loadPoint, loadPoint];
-    var drawUnload = vue.unloadPoint && drawPoint(amap, container, vue.unloadPoint.slice(), vue.unloadRule || defaultUnloadRule, distance) || [unloadPoint, unloadPoint];
+    var distance = (vue.trackInfo && vue.trackInfo.realDistance) || amap.GeometryUtil.distance(ld, un);
+    console.log('distance in admin-widget', distance);
+    var drawLoad = vue.loadPoint && drawPoint(amap, container, vue.loadPoint.slice(), vue.loadRule || defaultLoadRule, distance) || [void 0, void 0];
+    var drawUnload = vue.unloadPoint && drawPoint(amap, container, vue.unloadPoint.slice(), vue.unloadRule || defaultUnloadRule, distance) || [void 0, void 0];
     return Promise.all([amap, container, drawLoad, drawUnload]);
   }).then(function (ref){
     var amap = ref[0];
@@ -877,15 +878,12 @@ var renderTheRoute = function (vue) {
   });
 };
 
-var renderTheAction = function (
-vue, 
-startPoint,
-endPoint) {
+var renderTheAction = function (vue, startPoint, endPoint) {
   if ( startPoint === void 0 ) startPoint={};
   if ( endPoint === void 0 ) endPoint={};
 
   return prepareMap(vue).then(function (ok) {
-    return Promise.all([vue.amapResolve, vue.containerResolve])
+    return Promise.all([vue.amapResolve, vue.containerResolve]);
   }).then(function (ref) {
     var amap = ref[0];
     var container = ref[1];
@@ -1129,7 +1127,7 @@ var drawTrackPassPoint = function (vue, trackPartList, category) {
   
     });
     return passPointList;
-  })
+  });
 };
 var clearPartMakerList = function (map, container) {
   if ( map === void 0 ) map={};
@@ -1192,7 +1190,7 @@ var getValidPathArray = function (vue, passPointArray, isAscend) {
         trackDistance: getDistance(ele, arr[idx - 1], amap)
       });
     });
-    return validPassPointArray
+    return validPassPointArray;
   });
 };
 var shinningMap = new WeakMap();

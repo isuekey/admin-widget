@@ -160,7 +160,8 @@ const renderTheRoute = (vue) => {
   }).then(([amap, container]) => {
     const ld = (vue.loadPoint || vue.unloadPoint || tian_an_men).slice();
     const un = (vue.unloadPoint || vue.loadPoint || tian_an_men).slice();
-    const distance = (vue.trackInfo && vue.trackInfo.planDistance) || amap.GeometryUtil.distance(ld, un);
+    const distance = (vue.trackInfo && vue.trackInfo.realDistance) || amap.GeometryUtil.distance(ld, un);
+    console.log('distance in admin-widget', distance);
     const drawLoad = vue.loadPoint && drawPoint(amap, container, vue.loadPoint.slice(), vue.loadRule || defaultLoadRule, distance) || [void 0, void 0];
     const drawUnload = vue.unloadPoint && drawPoint(amap, container, vue.unloadPoint.slice(), vue.unloadRule || defaultUnloadRule, distance) || [void 0, void 0];
     return Promise.all([amap, container, drawLoad, drawUnload]);
