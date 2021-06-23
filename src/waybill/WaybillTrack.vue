@@ -60,6 +60,7 @@ export default {
     moveTriggerInfoWindow:{ type:Boolean, default: true, },
     isRunning:{ type:Boolean, default:false, },
     emitLastPosition:Boolean,
+    pointDensity: { type: Number, default: 0 },
   },
   data(){
     const uuid = simpleUUIdv4.uuid();

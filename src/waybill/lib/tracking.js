@@ -161,13 +161,26 @@ const drawTrackPassPoint = (vue, trackPartList, category="lines") => {
     clearPartMakerList(categoryMarkerMap, container);
     const passPointList = trackPartList.map((trackPart=[], idx) => {
       const validTrack = trackPart.filter(ele => ele.lng && ele.lat);
-      let drawTrack = [];
-      const resolution = container.getResolution();
-      const pathLength = amap.GeometryUtil.distanceOfLine(validTrack.map(ele => [ele.lng, ele.lat]));
-      const points = Math.floor(pathLength / (resolution * 30)) || 1;
       const trackLength = validTrack.length;
       const lastIndex = trackLength - 1;
-      let step = Math.floor(trackLength / points) || 1;
+      let step = 1;
+      let drawTrack = [];
+      switch(vue.pointDensity) {
+      case 0:
+      case 'nopass':
+        step = trackLength + 1;
+        break;
+      case 1:
+      case 'everypass':
+        step = 1;
+        break;
+      default:
+        const px = vue.pointDensity > 1 ? vue.pointDensity : 30;
+        const resolution = container.getResolution();
+        const pathLength = amap.GeometryUtil.distanceOfLine(validTrack.map(ele => [ele.lng, ele.lat]));
+        const points = Math.floor(pathLength / (resolution * 30)) || 1;
+        step = Math.floor(trackLength / points) || 1;
+      }
       drawTrack = validTrack.filter((ele, idx) => idx % step == 0 || idx == lastIndex || ele.isDangerous);
       return drawTrack.map(trackEle => {
         const newTrackMarker = drawPassPointMarker(categoryMarkerMap, trackEle, amap, container, vue);
