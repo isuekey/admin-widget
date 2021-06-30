@@ -94,7 +94,8 @@ const loadPointIconSetting = {
       offset:[-9, -4]
     }
   }
-}
+};
+
 const drawPassPointMarker = (map={}, trackEle, amap, container, vue, still=false) => {
   const pointIcon = new amap.Icon({
     image: loadPointIconSetting.pass[trackEle.origin],
@@ -157,39 +158,55 @@ const drawTrackPassPoint = (vue, trackPartList, category="lines") => {
   return confirmAmap(vue).then(([amap, container]) => {
     const markerMap = globalMarkerMap.get(vue.amapResolve) || {};
     globalMarkerMap.set(vue.amapResolve, markerMap);
+    const resolution = container.getResolution();
     const categoryMarkerMap = markerMap[category] = markerMap[category] || {};
-    clearPartMakerList(categoryMarkerMap, container);
-    const passPointList = trackPartList.map((trackPart=[], idx) => {
-      const validTrack = trackPart.filter(ele => ele.lng && ele.lat);
-      const trackLength = validTrack.length;
-      const lastIndex = trackLength - 1;
-      let step = 1;
-      let drawTrack = [];
-      switch(vue.pointDensity) {
-      case 0:
-      case 'nopass':
-        step = trackLength + 1;
-        break;
-      case 1:
-      case 'everypass':
-        step = 1;
-        break;
-      default:
-        const px = vue.pointDensity > 1 ? vue.pointDensity : 30;
-        const resolution = container.getResolution();
-        const pathLength = amap.GeometryUtil.distanceOfLine(validTrack.map(ele => [ele.lng, ele.lat]));
-        const points = Math.floor(pathLength / (resolution * 30)) || 1;
-        step = Math.floor(trackLength / points) || 1;
-      }
-      drawTrack = validTrack.filter((ele, idx) => idx % step == 0 || idx == lastIndex || ele.isDangerous);
-      return drawTrack.map(trackEle => {
-        const newTrackMarker = drawPassPointMarker(categoryMarkerMap, trackEle, amap, container, vue);
-        container.add(newTrackMarker);
-        return newTrackMarker;
+    const handleDrawPassPoint = () => {
+      clearPartMakerList(categoryMarkerMap, container);
+      const bounds = container.getBounds();
+      const passPointList = trackPartList.map((trackPart=[], idx) => {
+        const validTrack = trackPart.filter(ele => ele.lng && ele.lat);
+        const trackLength = validTrack.length;
+        const lastIndex = trackLength - 1;
+        let step = 1;
+        let drawTrack = [];
+        switch(vue.pointDensity) {
+        case 0:
+        case 'nopass':
+          step = Infinity;
+          break;
+        case 1:
+        case 'everypass':
+          step = 0;
+          break;
+        default:
+          const px = parseFloat(vue.pointDensity) > 1 ? vue.pointDensity * 5: 72;
+          // const pathLength = amap.GeometryUtil.distanceOfLine(validTrack.map(ele => [ele.lng, ele.lat]));
+          // const points = Math.floor(pathLength / (resolution * 30)) || 1;
+          // step = Math.floor(trackLength / points) || 1;
+          step = resolution * px;
+        }
+        let accumulateDistance = 0;
+        drawTrack = validTrack.filter((ele, idx) => {
+          const isSpecial = idx == 0 || idx == lastIndex || ele.isDangerous;
+          accumulateDistance += (ele.trackDistance || 0);
+          const isOver = accumulateDistance >= step;
+          if(isOver) {
+            accumulateDistance = 0;
+          }
+          // console.log('accumulateDistance', accumulateDistance, 'isOver', isOver, ele.trackDistance, ele);
+          return isSpecial || isOver;
+        });
+        // console.log('drawTrack', resolution, step, drawTrack);
+        return drawTrack.map(trackEle => {
+          const newTrackMarker = drawPassPointMarker(categoryMarkerMap, trackEle, amap, container, vue);
+          container.add(newTrackMarker);
+          return newTrackMarker;
+        });
+        
       });
-  
-    });
-    return passPointList;
+      return passPointList;
+    };
+    return handleDrawPassPoint();
   });
 };
 const clearPartMakerList = (map={}, container) => {
@@ -348,7 +365,7 @@ const moveLorryTo = (vue, passPointArray=[], type="lorry", emit=false) => {
     const lastPoint = lastPointArray[0];
     if(!lastPoint) return lorryMarker;
     lorryMarker.setPosition(position);
-    if(emit){vue.$emit('clickPoint', lastPoint)}
+    if(emit){vue.$emit('clickPoint', lastPoint); }
     newInfoWindow(vue, lastPoint).then(([infoWindow, amap, container]) =>{
       if(!infoWindow.getIsOpen()){
         infoWindow.open(container, position);

@@ -130,8 +130,14 @@ export default {
       const vue = this;
       mapUtils.loadUnload.renderTheRoute(vue).then(ok => {
         const [startPoint, endPoint] = vue.getAciontRange();
-        return Promise.all([mapUtils.loadUnload.renderTheAction(vue, startPoint, endPoint), startPoint, endPoint]);
-      }).then(([ok, startPoint, endPoint]) => {
+        return Promise.all([mapUtils.loadUnload.renderTheAction(vue, startPoint, endPoint), startPoint, endPoint, vue.containerResolve]);
+      }).then(([ok, startPoint, endPoint, container]) => {
+        if(!vue._handleDrawPassPoint) {
+          container.on('zoomend', (event) =>{
+            vue.drawTrackPath(startPoint, endPoint);
+          });
+          vue._handleDrawPassPoint = vue.drawTrackPath;
+        }
         vue.drawTrackPath(startPoint, endPoint);
       }).then(ok => {
         // console.log('selectedPoint', vue.selectedPoint);
