@@ -4,6 +4,7 @@ import AmapRoute from './waybill/amap-route.vue';
 import WaybillTrack from './waybill/WaybillTrack.vue';
 import * as mapUtils from './waybill/lib/map.utils.js';
 import * as base from './base/index.js';
+import * as widgets from './widget/index.js';
 
 export function install(Vue) {
   if(install.installed) return;
@@ -36,5 +37,6 @@ export {
   waybill,
   mapUtils,
   base,
+  widgets,
 };
 
