@@ -11,48 +11,17 @@ import { uuid } from 'simple-uuidv4';
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 var script = {
-  name:"FundTransferDialog",
-  props: {
-    showDialog:Boolean,
-    dialogTitle:String,
+  name:'log',
+  props:{
+    className:String,
+    loadPoint:Array,
+    unloadPoint:Array,
+    loadRule:Function,
+    unloadRule:Function,
+    amap:Object,
   },
-  computed: {
-    show:{
-      get: function get() {
-        var vue = this;
-        return !!vue.showDialog;
-      },
-      set: function set(val) {
-        var vue = this;
-        vue.$emit('update:showDialog', val);
-      },
-    }
-  }
 };
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -130,379 +99,6 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
     return script;
 }
 
-/* script */
-var __vue_script__ = script;
-
-/* template */
-var __vue_render__ = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "el-dialog",
-    {
-      directives: [
-        {
-          name: "loading",
-          rawName: "v-loading",
-          value: _vm.loading,
-          expression: "loading"
-        }
-      ],
-      attrs: {
-        visible: _vm.show,
-        "append-to-body": "",
-        "close-on-click-modal": false,
-        center: "",
-        title: _vm.dialogTitle
-      },
-      on: {
-        "update:visible": function($event) {
-          _vm.show = $event;
-        }
-      }
-    },
-    [
-      _c(
-        "el-form",
-        {
-          ref: "fundTransferForm",
-          staticClass: "inline-form",
-          attrs: { model: _vm.widthdrawInfo }
-        },
-        [
-          _c(
-            "el-row",
-            [
-              _c(
-                "el-col",
-                [
-                  _c(
-                    "el-form-item",
-                    {
-                      attrs: {
-                        label: "转出虚户名称",
-                        prop: "outer.accountInfo"
-                      }
-                    },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.widthdrawInfo.outer.accountInfo,
-                          callback: function($$v) {
-                            _vm.$set(
-                              _vm.widthdrawInfo.outer,
-                              "accountInfo",
-                              $$v
-                            );
-                          },
-                          expression: "widthdrawInfo.outer.accountInfo"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "el-col",
-                [
-                  _c(
-                    "el-form-item",
-                    {
-                      attrs: {
-                        label: "选择转出账户",
-                        prop: "outer.accountInfo"
-                      }
-                    },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.widthdrawInfo.outer.accountInfo,
-                          callback: function($$v) {
-                            _vm.$set(
-                              _vm.widthdrawInfo.outer,
-                              "accountInfo",
-                              $$v
-                            );
-                          },
-                          expression: "widthdrawInfo.outer.accountInfo"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "el-col",
-                [
-                  _c(
-                    "el-form-item",
-                    {
-                      attrs: {
-                        label: "转出虚户名称",
-                        prop: "outer.accountInfo"
-                      }
-                    },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.widthdrawInfo.outer.accountInfo,
-                          callback: function($$v) {
-                            _vm.$set(
-                              _vm.widthdrawInfo.outer,
-                              "accountInfo",
-                              $$v
-                            );
-                          },
-                          expression: "widthdrawInfo.outer.accountInfo"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "el-col",
-                [
-                  _c(
-                    "el-form-item",
-                    {
-                      attrs: {
-                        label: "转出虚户名称",
-                        prop: "outer.accountInfo"
-                      }
-                    },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.widthdrawInfo.outer.accountInfo,
-                          callback: function($$v) {
-                            _vm.$set(
-                              _vm.widthdrawInfo.outer,
-                              "accountInfo",
-                              $$v
-                            );
-                          },
-                          expression: "widthdrawInfo.outer.accountInfo"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-};
-var __vue_staticRenderFns__ = [];
-__vue_render__._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__ = undefined;
-  /* scoped */
-  var __vue_scope_id__ = undefined;
-  /* module identifier */
-  var __vue_module_identifier__ = undefined;
-  /* functional template */
-  var __vue_is_functional_template__ = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__ = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
-    __vue_inject_styles__,
-    __vue_script__,
-    __vue_scope_id__,
-    __vue_is_functional_template__,
-    __vue_module_identifier__,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var buttonProps = {
-  type:{
-    type:String, default:'text'
-  },
-  label: {
-    type:String, default:'按钮', required:true,
-  },
-  size: {
-    type:String, default:'small'
-  },
-  plain:Boolean,
-  round:Boolean,
-  circle:Boolean,
-  disabled:Boolean,
-  icon:String,
-};
-
-//
-
-var props = Object.assign({}, 
-  buttonProps, __vue_component__.props, {
-  loadingMask:Boolean,
-  buttonData:{
-    type:Object, default: function default$1(){ return {}; },
-  },
-  buttonClass:String,
-});
-var script$1 = {
-  name: 'FundTransferButton',
-  uuid: uuid(),
-  components: {
-    fundTransferDialog: __vue_component__,
-  },
-  props: props,
-  data: function data() {
-    return {
-      loadig:false,
-      buttonLoading:false,
-      showDialog:false,
-    }
-  },
-  methods:{
-    handleButtonClick: function handleButtonClick(){
-      var vue = this;
-      vue.showDialog = true;
-    }
-  }
-};
-
-/* script */
-var __vue_script__$1 = script$1;
-
-/* template */
-var __vue_render__$1 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "loading",
-          rawName: "v-loading",
-          value: _vm.loadingMask && _vm.loading,
-          expression: "loadingMask && loading"
-        }
-      ],
-      class: _vm.buttonClass
-    },
-    [
-      _c(
-        "el-button",
-        {
-          attrs: {
-            type: _vm.type,
-            loading: _vm.buttonLoading,
-            size: _vm.size,
-            plain: _vm.plain,
-            round: _vm.round,
-            circle: _vm.circle,
-            disabled: _vm.disabled,
-            icon: _vm.icon
-          },
-          on: { click: _vm.handleButtonClick }
-        },
-        [_vm._v(_vm._s(_vm.label))]
-      ),
-      _vm._v(" "),
-      _c("fund-transfer-dialog", {
-        attrs: { showDialog: _vm.showDialog },
-        on: {
-          "update:showDialog": function($event) {
-            _vm.showDialog = $event;
-          },
-          "update:show-dialog": function($event) {
-            _vm.showDialog = $event;
-          }
-        }
-      })
-    ],
-    1
-  )
-};
-var __vue_staticRenderFns__$1 = [];
-__vue_render__$1._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$1 = undefined;
-  /* scoped */
-  var __vue_scope_id__$1 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$1 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$1 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$1 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
-    __vue_inject_styles__$1,
-    __vue_script__$1,
-    __vue_scope_id__$1,
-    __vue_is_functional_template__$1,
-    __vue_module_identifier__$1,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var script$2 = {
-  name:'log',
-  props:{
-    className:String,
-    loadPoint:Array,
-    unloadPoint:Array,
-    loadRule:Function,
-    unloadRule:Function,
-    amap:Object,
-  },
-};
-
 var isOldIE = typeof navigator !== 'undefined' &&
     /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
 function createInjector(context) {
@@ -557,10 +153,10 @@ function addStyle(id, css) {
 }
 
 /* script */
-var __vue_script__$2 = script$2;
+var __vue_script__ = script;
 
 /* template */
-var __vue_render__$2 = function() {
+var __vue_render__ = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -578,34 +174,34 @@ var __vue_render__$2 = function() {
     _c("div", [_vm._v("amap:" + _vm._s(_vm.amap))])
   ])
 };
-var __vue_staticRenderFns__$2 = [];
-__vue_render__$2._withStripped = true;
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$2 = function (inject) {
+  var __vue_inject_styles__ = function (inject) {
     if (!inject) { return }
     inject("data-v-627e1c07_0", { source: "\ndiv.log[data-v-627e1c07] {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n}\n", map: {"version":3,"sources":["/media/liuhanru/mywork/apps/dayi/admin-widget/src/waybill/components/log.vue"],"names":[],"mappings":";AA0BA;EACA,aAAA;EACA,sBAAA;EACA,uBAAA;AACA","file":"log.vue","sourcesContent":["<template>\n<div class=\"log\">\n  <div>className:{{className}}</div>\n  <div>logPoint:{{logPoint}}</div>\n  <div>unloadPoint:{{unloadPoint}}</div>\n  <div>loadRule:{{loadRule}}</div>\n  <div>unloadRule:{{unloadRule}}</div>\n  <div>amap:{{amap}}</div>\n</div>\n</template>\n\n<script>\nexport default {\n  name:'log',\n  props:{\n    className:String,\n    loadPoint:Array,\n    unloadPoint:Array,\n    loadRule:Function,\n    unloadRule:Function,\n    amap:Object,\n  },\n}\n</script>\n\n<style scoped>\ndiv.log {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n}\n</style>"]}, media: undefined });
 
   };
   /* scoped */
-  var __vue_scope_id__$2 = "data-v-627e1c07";
+  var __vue_scope_id__ = "data-v-627e1c07";
   /* module identifier */
-  var __vue_module_identifier__$2 = undefined;
+  var __vue_module_identifier__ = undefined;
   /* functional template */
-  var __vue_is_functional_template__$2 = false;
+  var __vue_is_functional_template__ = false;
   /* style inject SSR */
   
   /* style inject shadow dom */
   
 
   
-  var __vue_component__$2 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
-    __vue_inject_styles__$2,
-    __vue_script__$2,
-    __vue_scope_id__$2,
-    __vue_is_functional_template__$2,
-    __vue_module_identifier__$2,
+  var __vue_component__ = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
     false,
     createInjector,
     undefined,
@@ -1430,10 +1026,10 @@ var map_utils = /*#__PURE__*/Object.freeze({
 
 //
 
-var script$3 = {
+var script$1 = {
   name:'AmapRoute',
   components:{
-    log: __vue_component__$2,
+    log: __vue_component__,
   },
   props:{
     className:String,
@@ -1484,10 +1080,10 @@ var script$3 = {
 };
 
 /* script */
-var __vue_script__$3 = script$3;
+var __vue_script__$1 = script$1;
 
 /* template */
-var __vue_render__$3 = function() {
+var __vue_render__$1 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -1500,17 +1096,17 @@ var __vue_render__$3 = function() {
     1
   )
 };
-var __vue_staticRenderFns__$3 = [];
-__vue_render__$3._withStripped = true;
+var __vue_staticRenderFns__$1 = [];
+__vue_render__$1._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$3 = undefined;
+  var __vue_inject_styles__$1 = undefined;
   /* scoped */
-  var __vue_scope_id__$3 = undefined;
+  var __vue_scope_id__$1 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$3 = undefined;
+  var __vue_module_identifier__$1 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$3 = false;
+  var __vue_is_functional_template__$1 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -1519,13 +1115,13 @@ __vue_render__$3._withStripped = true;
   
 
   
-  var __vue_component__$3 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
-    __vue_inject_styles__$3,
-    __vue_script__$3,
-    __vue_scope_id__$3,
-    __vue_is_functional_template__$3,
-    __vue_module_identifier__$3,
+  var __vue_component__$1 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
+    __vue_inject_styles__$1,
+    __vue_script__$1,
+    __vue_scope_id__$1,
+    __vue_is_functional_template__$1,
+    __vue_module_identifier__$1,
     false,
     undefined,
     undefined,
@@ -1537,7 +1133,7 @@ var typeSwitch = {
   primary:'info', info:'primary'
 };
 var deviceMapping = glossary.deviceMapping;
-var script$4 = {
+var script$2 = {
   name:'WaybillTrack',
   props: {
     trackInfo: { type: Object, default: function default$1() { return {}; }, },
@@ -1762,8 +1358,8 @@ var script$4 = {
 var img$g = "data:image/svg+xml,%3c%3fxml version='1.0' encoding='UTF-8'%3f%3e%3csvg width='52px' height='52px' viewBox='0 0 52 52' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e %3ctitle%3e%e7%bc%96%e7%bb%84 4%3c/title%3e %3cdefs%3e %3clinearGradient x1='-12.313058%25' y1='-14.7070312%25' x2='109.143415%25' y2='108.638393%25' id='linearGradient-1'%3e %3cstop stop-color='%23F1DCC4' offset='0%25'%3e%3c/stop%3e %3cstop stop-color='%23AE9484' offset='100%25'%3e%3c/stop%3e %3c/linearGradient%3e %3crect id='path-2' x='0' y='0' width='52' height='52' rx='3.57142857'%3e%3c/rect%3e %3cpath d='M22.1207049%2c27.7447245 C25.7254001%2c27.7447245 28.565433%2c24.7734665 29.6418686%2c22.5208687 C31.1577996%2c19.3485629 31.4216947%2c13.8438427 31.4216947%2c9.53771013 C31.4216947%2c1.66531625 26.0844392%2c1.9356158 21.6270304%2c1.9356158 C17.1696215%2c1.9356158 12.7759675%2c1.66531625 12.7759675%2c9.53771013 C12.7759675%2c13.8803566 13.0253319%2c19.3517497 14.5858142%2c22.5208687 C15.856767%2c25.1019943 18.5160098%2c27.7447245 22.1207049%2c27.7447245 Z' id='path-4'%3e%3c/path%3e %3c/defs%3e %3cg id='2020.04.03--%e5%9c%b0%e5%9b%be%e4%bc%98%e5%8c%96' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e %3cg id='A4-1--2-%e8%bf%90%e5%8d%95%e8%bd%a8%e8%bf%b9-%e5%ae%9e%e6%97%b6%e8%bd%a8%e8%bf%b9' transform='translate(-286.000000%2c -579.000000)'%3e %3cg id='%e7%bc%96%e7%bb%84-4' transform='translate(286.000000%2c 579.000000)'%3e %3cmask id='mask-3' fill='white'%3e %3cuse xlink:href='%23path-2'%3e%3c/use%3e %3c/mask%3e %3cuse id='%e8%92%99%e7%89%88' fill='url(%23linearGradient-1)' xlink:href='%23path-2'%3e%3c/use%3e %3cg id='%e7%bc%96%e7%bb%84-11' mask='url(%23mask-3)'%3e %3cg transform='translate(3.714286%2c 7.239230)'%3e %3cpath d='M5.59704302%2c36.0225499 C11.1756725%2c31.9513992 16.7077196%2c29.9158238 22.1931845%2c29.9158238 C27.7082279%2c29.9158238 33.2157485%2c31.9734106 38.7157465%2c36.0885843 C40.5745998%2c37.4793988 41.9314169%2c39.4363531 42.581989%2c41.6649079 L44.3089983%2c47.5808312 L44.3089983%2c47.5808312 L5.27831747e-14%2c47.5808312 L1.58343856%2c41.8320749 C2.22642151%2c39.4976789 3.64115899%2c37.4499074 5.59704302%2c36.0225499 Z' id='Rectangle%e5%a4%87%e4%bb%bd-11' stroke='none' fill='%23A88269' fill-rule='evenodd'%3e%3c/path%3e %3cpath d='M25.2320359%2c30.3361024 C26.0891119%2c30.0677211 26.760568%2c29.876567 27.2464041%2c29.7626402 C27.7174612%2c29.652179 28.356183%2c29.5269308 29.1625695%2c29.3868956 L29.1625776%2c29.3869425 C29.3180205%2c29.3599486 29.4659148%2c29.4640771 29.4929086%2c29.61952 C29.4938488%2c29.6249338 29.4946325%2c29.6303736 29.4952589%2c29.6358326 C29.7854488%2c32.1649064 29.9305437%2c34.9799924 29.9305437%2c38.0810905 C29.9305437%2c41.3053471 29.6273402%2c44.0509031 29.0209334%2c46.3177587 L24.2856429%2c50.8905755 C25.0166065%2c45.6204602 25.3820884%2c41.4281165 25.3820884%2c38.3135446 C25.3820884%2c35.3102943 25.2658659%2c32.7524563 25.033421%2c30.6400308 L25.0334015%2c30.640033 C25.0184625%2c30.5042694 25.1016938%2c30.3769172 25.2320359%2c30.3361024 Z' id='%e7%9f%a9%e5%bd%a2' stroke='none' fill='%234E3838' fill-rule='evenodd' transform='translate(27.108093%2c 40.113219) rotate(44.000000) translate(-27.108093%2c -40.113219) '%3e%3c/path%3e %3cpolygon id='Rectangle%e5%a4%87%e4%bb%bd-13' stroke='none' fill='%23FFDAC2' fill-rule='evenodd' points='17.778095 22.0361607 26.7933336 22.0361607 26.6352769 32.1572719 18.0816288 32.1572719'%3e%3c/polygon%3e %3cpath d='M17.9132764%2c30.0950182 C19.0827529%2c31.1786715 20.5811384%2c31.7204982 22.4084328%2c31.7204982 C24.2099068%2c31.7204982 25.5784294%2c31.215928 26.5140005%2c30.2067876 C26.6326397%2c30.0787273 26.8171048%2c30.0354764 26.980324%2c30.0973971 L28.1441118%2c30.5389048 C28.2548882%2c30.580777 28.3105964%2c30.7045905 28.2685903%2c30.8153162 C28.2611579%2c30.8349075 28.250894%2c30.8533036 28.238126%2c30.869918 C26.9348872%2c32.5657574 24.9916562%2c33.4136771 22.4084328%2c33.4136771 C19.8269576%2c33.4136771 17.7280875%2c32.5473895 16.1118225%2c30.8148142 C16.0311948%2c30.7282508 16.0359023%2c30.592712 16.1224035%2c30.5120177 C16.1436322%2c30.4922141 16.1686652%2c30.4769328 16.1959817%2c30.4671019 L17.4768561%2c30.0061311 C17.6275119%2c29.9519064 17.7958291%2c29.9861898 17.9132764%2c30.0950182 Z' id='%e8%b7%af%e5%be%84-21%e5%a4%87%e4%bb%bd' stroke='none' fill='%23CFAB8E' fill-rule='evenodd'%3e%3c/path%3e %3cpath d='M12.4947703%2c19.1782786 C14.1143741%2c19.3485058 15.5975922%2c17.8664933 15.7902702%2c16.0332846 C15.9829482%2c14.200076 14.7121412%2c13.661132 13.0925373%2c13.4909047 C11.4729335%2c13.3206775 10.1178439%2c13.5836287 9.92516593%2c15.4168373 C9.73248793%2c17.250046 10.8751664%2c19.0080514 12.4947703%2c19.1782786 Z' id='Oval%e5%a4%87%e4%bb%bd' stroke='none' fill='%23FFDAC2' fill-rule='evenodd'%3e%3c/path%3e %3cpath d='M31.7028919%2c19.1782786 C30.0832881%2c19.3485058 28.60007%2c17.8664933 28.407392%2c16.0332846 C28.214714%2c14.200076 29.485521%2c13.661132 31.1051249%2c13.4909047 C32.7247287%2c13.3206775 34.0798183%2c13.5836287 34.2724963%2c15.4168373 C34.4651743%2c17.250046 33.3224958%2c19.0080514 31.7028919%2c19.1782786 Z' id='Oval%e5%a4%87%e4%bb%bd-2' stroke='none' fill='%23FFDAC2' fill-rule='evenodd'%3e%3c/path%3e %3cmask id='mask-5' fill='white'%3e %3cuse xlink:href='%23path-4'%3e%3c/use%3e %3c/mask%3e %3cuse id='%e8%92%99%e7%89%88' stroke='none' fill='%23FFE7D6' fill-rule='evenodd' xlink:href='%23path-4'%3e%3c/use%3e %3cpath d='M23.1353149%2c18.7568947 C23.3427459%2c17.6638684 22.8984572%2c16.2390176 22.4833281%2c15.5891022 C22.3430834%2c15.3695386 21.8605422%2c15.3656585 21.7235133%2c15.5790553 C21.3077097%2c16.226591 20.8575369%2c17.6674459 21.059513%2c18.7538274 C21.1057483%2c19.002516 23.0943996%2c18.9724917 23.1353149%2c18.7568947 Z' id='%e6%a4%ad%e5%9c%86%e5%bd%a2%e5%a4%87%e4%bb%bd-7' stroke='none' fill='%23FBD3B9' fill-rule='evenodd'%3e%3c/path%3e %3cpath d='M20.2123289%2c21.9654824 C20.7987034%2c22.3201607 21.4863308%2c22.5242881 22.2216347%2c22.5242881 C22.9332852%2c22.5242881 23.6002772%2c22.3330823 24.1740402%2c21.9992414' id='%e8%b7%af%e5%be%84%e5%a4%87%e4%bb%bd-5' stroke='%23EE9585' stroke-width='0.857142857' fill='none' stroke-linecap='round'%3e%3c/path%3e %3cpath d='M12.8459583%2c14.0776 C12.5412311%2c13.6536928 12.0974331%2c13.466828 11.5145645%2c13.5170059 C11.3937709%2c12.1889509 11.0380542%2c6.60754063 12.7759675%2c3.84813058 C14.3666504%2c1.32248884 17.0277581%2c5.03089633e-14 22.061829%2c5.03089633e-14 C26.6055558%2c5.03089633e-14 29.7540039%2c1.27869001 31.3063946%2c3.84813058 C32.7761508%2c6.2807986 32.9449707%2c12.2186035 32.7849923%2c13.5485105 C32.1323012%2c13.4932268 31.6394353%2c13.6695899 31.3063946%2c14.0776 C31.3063946%2c11.9349587 29.8240095%2c8.30980748 29.1999442%2c7.87816685 C28.5758789%2c7.44652623 28.5758789%2c8.37600446 22.0988311%2c8.50332031 C15.6217833%2c8.63063616 15.0919608%2c7.51929757 14.5972934%2c7.87816685 C14.1026259%2c8.23703613 12.7936538%2c11.9349587 12.8459583%2c14.0776 Z' id='%e8%b7%af%e5%be%84-19%e5%a4%87%e4%bb%bd' stroke='none' fill='%2348433D' fill-rule='evenodd'%3e%3c/path%3e %3cpath d='M6.93500056%2c44.9290737 C7.18165235%2c42.6286135 8.02144727%2c40.7585486 8.35415514%2c40.8879048 C8.68686301%2c41.017261 8.35112208%2c43.2534042 8.61953251%2c44.9290737 C8.61953251%2c44.9290737 6.93500056%2c44.9290737 6.93500056%2c44.9290737 Z' id='%e8%b7%af%e5%be%84-22' stroke='none' fill='%23966D52' fill-rule='evenodd'%3e%3c/path%3e %3cpath d='M35.2447767%2c44.9290737 C35.4914284%2c42.6286135 36.3312234%2c40.7585486 36.6639312%2c40.8879048 C36.9966391%2c41.017261 36.6608982%2c43.2534042 36.9293086%2c44.9290737 C36.9293086%2c44.9290737 35.2447767%2c44.9290737 35.2447767%2c44.9290737 Z' id='%e8%b7%af%e5%be%84-22' stroke='none' fill='%23966D52' fill-rule='evenodd' transform='translate(36.087043%2c 42.905324) scale(-1%2c 1) translate(-36.087043%2c -42.905324) '%3e%3c/path%3e %3c/g%3e %3c/g%3e %3c/g%3e %3c/g%3e %3c/g%3e%3c/svg%3e";
 
 /* script */
-var __vue_script__$4 = script$4;
-var __vue_render__$4 = function() {
+var __vue_script__$2 = script$2;
+var __vue_render__$2 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -1916,7 +1512,7 @@ var __vue_render__$4 = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$4 = [
+var __vue_staticRenderFns__$2 = [
   function() {
     var _vm = this;
     var _h = _vm.$createElement;
@@ -1928,55 +1524,246 @@ var __vue_staticRenderFns__$4 = [
     ])
   }
 ];
-__vue_render__$4._withStripped = true;
+__vue_render__$2._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$4 = function (inject) {
+  var __vue_inject_styles__$2 = function (inject) {
     if (!inject) { return }
     inject("data-v-1ad74eae_0", { source: "\n.track-amap-container {\n  flex: 1;\n  width: 100%;\n  height: 100%;\n  background: coral;\n}\n.track-amap {\n  min-width: 200px;\n  min-height: 200px;\n  flex: 1;\n}\n.driver-info {\n  position: absolute;\n  top: 20px;\n  left: 20px;\n  padding:8px;\n  border-radius:4px;\n  background:#ffffffa0;\n  display:flex;\n  flex-direction: row;\n  align-items: center;\n}\n.track-tabs {\n  background: transparent;\n  position: absolute;\n  top: 120px;\n  left: 20px;\n}\n.user-avatar {\n  width: 60px;\n  height: 60px;\n  border-radius: 50%;\n  margin-right: 10px;\n}\n.user-avatar img {\n  width: 100%;\n  height: 100%;\n  opacity: 0.95;\n}\n.user-info {\n  width: 180px;\n  height: 60px;\n  padding: 0 10px;\n  color:#000000a0;\n}\n.user-name {\n  margin-right: 10px;\n}\n.user-phone {\n  line-height: 30px;\n}\n.plate-code >span {\n  background-color: #FAECD880;\n  padding:0 4px;\n  color: #61503A;\n  border-radius: 2px;\n}\n.height-100p {\n  height: 100%;\n}\n.min-height-400 {\n  min-height: 400px;\n}\n.min-height-700 {\n  min-height: 700px;\n}\n.amap-logo,\n.amap-copyright {\n  display: none !important;\n}\n.track-playback {\n  color:#000000a0;\n  display: flex;\n  flex-direction:column;\n  padding: 0 10px;\n  align-items: center;\n  justify-content:space-between;\n}\n.track-playback .el-button + .el-button {\n  margin-left:0;\n}\n.el-button.trackbutton {\n  background-color: #ffffff80;\n  border-color: #409EFF40;\n  color:#409EFF;\n  border-radius: 6px;\n  padding-bottom:5px !important;\n  padding-top:5px !important;\n}\n.trackbutton > span {\n  font-size: 12px;\n  font-weight: 700;\n  background: transparent;\n}\n.el-button.trackbutton:hover {\n  background-color: #409EFF18;\n  border-color: #409EFF00;\n  box-shadow: unset;\n}\n", map: {"version":3,"sources":["/media/liuhanru/mywork/apps/dayi/admin-widget/src/waybill/WaybillTrack.vue"],"names":[],"mappings":";AA4QA;EACA,OAAA;EACA,WAAA;EACA,YAAA;EACA,iBAAA;AACA;AACA;EACA,gBAAA;EACA,iBAAA;EACA,OAAA;AACA;AACA;EACA,kBAAA;EACA,SAAA;EACA,UAAA;EACA,WAAA;EACA,iBAAA;EACA,oBAAA;EACA,YAAA;EACA,mBAAA;EACA,mBAAA;AACA;AACA;EACA,uBAAA;EACA,kBAAA;EACA,UAAA;EACA,UAAA;AACA;AACA;EACA,WAAA;EACA,YAAA;EACA,kBAAA;EACA,kBAAA;AACA;AACA;EACA,WAAA;EACA,YAAA;EACA,aAAA;AACA;AACA;EACA,YAAA;EACA,YAAA;EACA,eAAA;EACA,eAAA;AACA;AACA;EACA,kBAAA;AACA;AACA;EACA,iBAAA;AACA;AACA;EACA,2BAAA;EACA,aAAA;EACA,cAAA;EACA,kBAAA;AACA;AACA;EACA,YAAA;AACA;AACA;EACA,iBAAA;AACA;AACA;EACA,iBAAA;AACA;AACA;;EAEA,wBAAA;AACA;AACA;EACA,eAAA;EACA,aAAA;EACA,qBAAA;EACA,eAAA;EACA,mBAAA;EACA,6BAAA;AACA;AACA;EACA,aAAA;AACA;AACA;EACA,2BAAA;EACA,uBAAA;EACA,aAAA;EACA,kBAAA;EACA,6BAAA;EACA,0BAAA;AACA;AACA;EACA,eAAA;EACA,gBAAA;EACA,uBAAA;AACA;AACA;EACA,2BAAA;EACA,uBAAA;EACA,iBAAA;AACA","file":"WaybillTrack.vue","sourcesContent":["<template>\n  <div class=\"track-amap-container\" v-loading=\"meta.loading\">\n    <div class=\"track-amap height-100p min-height-700\" :id=\"amapId\" :trackInfo=\"trackInfo\" :selectedPoint=\"selectedPoint\"></div>\n    <div class=\"driver-info\" v-if=\"showDriverInfo\">\n      <div class=\"user-avatar\">\n        <img src=\"./assets/carrior_portrait.svg\" alt />\n      </div>\n      <div class=\"user-info\">\n        <span class=\"user-name\">{{driverInfo.driverName}}</span>\n        <span class=\"user-phone\">{{driverInfo.driverPhone}}</span>\n        <div class=\"user-phone plate-code\"><span>{{driverInfo.carPlate}}</span></div>\n      </div>\n      <div class=\"track-playback\">\n        <el-button v-if=\"showPlayBack\" :disabled=\"disablePlayTrack\" plain type=\"default\" size=\"mini\" @click=\"handlePlayback\" class=\"trackbutton margin-bottom-8\">轨迹回放</el-button>\n        <!-- <el-button \n         plain type=\"default\" size=\"mini\" @click=\"refreshTrack\" class=\"trackbutton margin-bottom-8\"\n         v-if=\"baseInfo.waybillStatus == 3\"\n        >实时位置</el-button> -->\n      </div>\n    </div>\n    <div class=\"track-tabs\">\n      <div class=\"flex-row\" v-if=\"true\">\n        <el-button style=\"width:116px\" v-if=\"showDriverTrack\" :type=\"trackTypeOfVehicle\" size=\"mini\" @click=\"changeTrack('vehicle')\">车辆轨迹</el-button>\n        <el-button style=\"width:116px\" v-if=\"showVehicleTrack\" :type=\"trackTypeOfDriver\" size=\"mini\" @click=\"changeTrack('driver')\">司机轨迹</el-button>\n      </div>\n      <div class=\"flex-row padding-top-4\" v-if=\"true\">\n        <el-button v-if=\"showDriverTrack\" type=\"default\" size=\"mini\" @click=\"moveToEnd('vehicle')\">车辆实时位置</el-button>\n        <el-button v-if=\"showVehicleTrack\" type=\"default\" size=\"mini\" @click=\"moveToEnd('driver')\">司机实时位置</el-button>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nimport * as simpleUUIdv4 from 'simple-uuidv4';\nimport * as mapUtils from './lib/map.utils.js';\nconst typeSwitch = {\n  primary:'info', info:'primary'\n};\nconst deviceMapping = mapUtils.base.glossary.deviceMapping;\nexport default {\n  name:'WaybillTrack',\n  props: {\n    trackInfo: { type: Object, default() { return {}; }, },\n    baseInfo: { type: Object, default() { return {}; }, },\n    selectedPoint: Object,\n    showDriverInfo: { type: Boolean, default: true, },\n    driverInfo: { type: Object, default() { return {}; }, },\n    amap: null,\n    loadPoint:Array,\n    unloadPoint:Array,\n    showTrackType:{\n      type: Number, default: mapUtils.base.glossary.pathType.full\n    },\n    trackVehicleColor:{ type:String, default:\"#2288FF\", },\n    trackDriverColor:{ type:String, default:\"#D01F1F\", },\n    trackUnionColor:{ type:String, default:\"#2288FF\", },\n    showPlayBack:{ type:Boolean, default:true },\n    vehicleType:{ type:String, default:'lorry', },\n    moveTriggerInfoWindow:{ type:Boolean, default: true, },\n    isRunning:{ type:Boolean, default:false, },\n    emitLastPosition:Boolean,\n    pointDensity: { type: Number, default: 30 },\n  },\n  data(){\n    const uuid = simpleUUIdv4.uuid();\n    return {\n      meta: {\n        loading: false,\n      },\n      amapId: uuid,\n      amapResolve: null,\n      containerResolve: null,\n      trackTypeOfVehicle:'primary',\n      trackTypeOfDriver:'primary',\n      trackPath:{},\n      focusedPoint:null,\n    } \n  },\n  computed:{\n    disablePlayTrack() {\n      const vue = this;\n      const moveDriver = !!(vue.driverActive && vue.showDriverTrack);\n      const moveVehicle = !!(vue.vehicleActive && vue.showVehicleTrack);\n      const disabled = (moveDriver + moveVehicle)%2 == 0;\n      return disabled;\n    },\n    showUnionTrack(){\n      const vue = this;\n      return vue.showTrackType == mapUtils.base.glossary.pathType.union;\n    },\n    showDriverTrack() {\n      const vue = this;\n      return (vue.showTrackType & mapUtils.base.glossary.pathType.driver);\n    },\n    showVehicleTrack(){\n      const vue = this;\n      return (vue.showTrackType & mapUtils.base.glossary.pathType.vehicle);\n    },\n    driverActive() {\n      const vue = this;\n      return vue.trackTypeOfDriver == 'primary';\n    },\n    vehicleActive() {\n      const vue = this;\n      return vue.trackTypeOfVehicle == 'primary';\n    },\n  },\n  mounted() {\n    const vue = this;\n    mapUtils.base.callOnInitLifeCircle(vue).then(()=>{\n      vue.drawTrackAll();\n    });\n  },\n  updated() {\n    const vue = this;\n    mapUtils.base.callOnInitLifeCircle(vue).then(()=>{\n      vue.drawTrackAll();      \n    })\n  },\n  methods: {\n    getAciontRange(){\n      const vue = this;\n      const driverAction = vue.trackInfo && vue.trackInfo.driverOperate;\n      const startPoint = mapUtils.loadUnload.findDriverAction(driverAction, 2);\n      const endPoint = mapUtils.loadUnload.findDriverAction(driverAction, 3);\n      return [startPoint, endPoint];\n    },\n    drawTrackAll() {\n      const vue = this;\n      mapUtils.loadUnload.renderTheRoute(vue).then(ok => {\n        const [startPoint, endPoint] = vue.getAciontRange();\n        return Promise.all([mapUtils.loadUnload.renderTheAction(vue, startPoint, endPoint), startPoint, endPoint, vue.containerResolve]);\n      }).then(([ok, startPoint, endPoint, container]) => {\n        if(!vue._handleDrawPassPoint) {\n          container.on('zoomend', (event) =>{\n            vue.drawTrackPath(startPoint, endPoint);\n          });\n          vue._handleDrawPassPoint = vue.drawTrackPath;\n        }\n        vue.drawTrackPath(startPoint, endPoint);\n      }).then(ok => {\n        // console.log('selectedPoint', vue.selectedPoint);\n        if(!vue.selectedPoint) return mapUtils.tracking.hideInfoWindow(vue);\n        return mapUtils.tracking.showInfoWindowOfPoint(vue, vue.selectedPoint);\n      }).catch(err=>{\n        console.log(err);\n      });\n    },\n    drawTrackPath(startPoint, endPoint) {\n      const vue = this;\n      const trackPath =  vue.trackPath;\n      const copy = vue.trackInfo && vue.trackInfo.realtime.slice() || [];\n      const realtime = [endPoint].concat(copy).concat([startPoint]).filter(ele => !!ele).reverse();\n      const drawTrackPathHandle = (pathArray, pathColor, category=\"lines\") => {\n        return mapUtils.tracking.getValidPathArray(vue, pathArray).then((paths) => {\n          const trackParts = mapUtils.tracking.getTrackParts(paths);\n          mapUtils.tracking.drawTrackLine(vue, trackParts, pathColor, category);\n          mapUtils.tracking.drawTrackPassPoint(vue, trackParts, category);\n        });\n      };\n      if ((vue.showUnionTrack || vue.showDriverTrack)) {\n        if(vue.driverActive) {\n          trackPath.driver = drawTrackPathHandle(realtime.filter(ele=> ele.origin == mapUtils.base.glossary.pointType.app), vue.trackDriverColor, 'driver');\n        } else {\n          mapUtils.tracking.removeTrackLine(vue, 'driver');\n          mapUtils.tracking.removePassPoint(vue, 'driver');\n        }\n      };\n      if ((vue.showUnionTrack || vue.showVehicleTrack)) {\n        if(vue.vehicleActive) {\n          trackPath.vehicle = drawTrackPathHandle(realtime.filter(ele=> ele.origin != mapUtils.base.glossary.pointType.app), vue.trackVehicleColor, 'vehicle');\n        } else {\n          mapUtils.tracking.removeTrackLine(vue, 'vehicle');\n          mapUtils.tracking.removePassPoint(vue, 'vehicle');\n        }\n      };\n      return Promise.all([trackPath.all, trackPath.driver, trackPath.vehicle]);\n    },\n    handlePlayback() {\n      const vue = this;\n      vue.focusedPoint = null;\n      const realtime = vue.trackInfo && vue.trackInfo.realtime.slice() || [];\n      const willMoveDriver = vue.showDriverTrack && vue.driverActive;\n      const willMoveVehicle = vue.showVehicleTrack && vue.vehicleActive;\n      const willMoveOnUnion = vue.showUnionTrack || (willMoveDriver && willMoveVehicle);\n      if (willMoveOnUnion) {\n        return mapUtils.tracking.getValidPathArray(vue, realtime).then((paths) => {\n          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);\n        });\n      } else if (willMoveDriver) {\n        return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin == mapUtils.base.glossary.pointType.app)).then((paths) => {\n          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);\n        });\n      } else if (willMoveVehicle) {\n        return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin != mapUtils.base.glossary.pointType.app)).then((paths) => {\n          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);\n        });\n      }\n    },\n    changeTrack(target){\n      const vue = this;\n      const [startPoint, endPoint] = vue.getAciontRange();\n      switch(target) {\n      case 'vehicle':\n        vue.trackTypeOfVehicle = typeSwitch[vue.trackTypeOfVehicle];\n        vue.drawTrackPath(startPoint, endPoint);\n        break;\n      case 'driver':\n        vue.trackTypeOfDriver = typeSwitch[vue.trackTypeOfDriver];\n        vue.drawTrackPath(startPoint, endPoint);\n        break;\n      default:\n        return;\n      }\n    },\n    getInfoWindowContent(trackInfo){\n      const vue = this;\n      let velocity = [];\n      // console.log('velocity in track', trackInfo);\n      if (trackInfo.velocity) {\n        velocity=[\n          '<div style=\"display:flex;padding-top:4px;\"><div style=\"width:60px;text-align:left;font-size:12px\">速度</div><span style=\"font-size:12px\">',\n          trackInfo.velocityLabel,\n          '</span></div>'\n        ];\n      };\n      return [`\n      <div style=\"width:220px;padding:8px\">\n        <div style=\"display:flex;padding-top:4px;\"><div style=\"width:60px;text-align:left;font-size:12px\">经度</div><span style=\"font-size:12px\">${(trackInfo.lng*1 || 0).toFixed(6)}</span></div>\n        <div style=\"display:flex;padding-top:4px;\"><div style=\"width:60px;text-align:left;font-size:12px\">纬度</div><span style=\"font-size:12px\">${(trackInfo.lat*1 || 0).toFixed(6)}</span></div>\n        <div style=\"display:flex;padding-top:4px;\"><div style=\"width:60px;text-align:left;font-size:12px\">时间</div><span style=\"font-size:12px\">${trackInfo.trackTimeLabel}</span></div>\n        <div style=\"display:flex;padding-top:4px;\"><div style=\"width:60px;text-align:left;font-size:12px\">设备</div><span style=\"font-size:12px\">${deviceMapping[trackInfo.origin]}</span></div>\n        ${velocity.join('')}\n      `, vue.baseInfo && vue.baseInfo.type != 4 ?`\n        <div style=\"display:flex;padding-top:4px;\"><div style=\"width:60px;text-align:left;\"><div style=\"width:30px;font-size:12px;\">实时位置</div></div><div style=\"flex:1\"><span style=\"font-size:12px\">${trackInfo.addressInfo}</span></div></div>\n      `:'',`\n      </div>\n      `].join('');\n    },\n    moveToEnd(type){\n      const vue = this;\n      vue.focusedPoint = type;\n      const realtime = vue.trackInfo && vue.trackInfo.realtime.slice() || [];\n      switch(type) {\n      case \"driver\":\n        return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin == mapUtils.base.glossary.pointType.app)).then((paths) => {\n          if(paths.length) {\n            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType, vue.emitLastPosition);\n          } else {\n            return mapUtils.tracking.hideInfoWindow(vue);\n          }\n        });\n      case \"vehicle\":\n        return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin != mapUtils.base.glossary.pointType.app)).then((paths) => {\n          if (paths.length) {\n            return mapUtils.tracking.moveLorryTo(vue, paths, vue.vehicleType, vue.emitLastPosition);            \n          } else {\n            return mapUtils.tracking.hideInfoWindow(vue);\n          }\n        });\n      };\n    }\n  }\n}\n</script>\n\n<style>\n.track-amap-container {\n  flex: 1;\n  width: 100%;\n  height: 100%;\n  background: coral;\n}\n.track-amap {\n  min-width: 200px;\n  min-height: 200px;\n  flex: 1;\n}\n.driver-info {\n  position: absolute;\n  top: 20px;\n  left: 20px;\n  padding:8px;\n  border-radius:4px;\n  background:#ffffffa0;\n  display:flex;\n  flex-direction: row;\n  align-items: center;\n}\n.track-tabs {\n  background: transparent;\n  position: absolute;\n  top: 120px;\n  left: 20px;\n}\n.user-avatar {\n  width: 60px;\n  height: 60px;\n  border-radius: 50%;\n  margin-right: 10px;\n}\n.user-avatar img {\n  width: 100%;\n  height: 100%;\n  opacity: 0.95;\n}\n.user-info {\n  width: 180px;\n  height: 60px;\n  padding: 0 10px;\n  color:#000000a0;\n}\n.user-name {\n  margin-right: 10px;\n}\n.user-phone {\n  line-height: 30px;\n}\n.plate-code >span {\n  background-color: #FAECD880;\n  padding:0 4px;\n  color: #61503A;\n  border-radius: 2px;\n}\n.height-100p {\n  height: 100%;\n}\n.min-height-400 {\n  min-height: 400px;\n}\n.min-height-700 {\n  min-height: 700px;\n}\n.amap-logo,\n.amap-copyright {\n  display: none !important;\n}\n.track-playback {\n  color:#000000a0;\n  display: flex;\n  flex-direction:column;\n  padding: 0 10px;\n  align-items: center;\n  justify-content:space-between;\n}\n.track-playback .el-button + .el-button {\n  margin-left:0;\n}\n.el-button.trackbutton {\n  background-color: #ffffff80;\n  border-color: #409EFF40;\n  color:#409EFF;\n  border-radius: 6px;\n  padding-bottom:5px !important;\n  padding-top:5px !important;\n}\n.trackbutton > span {\n  font-size: 12px;\n  font-weight: 700;\n  background: transparent;\n}\n.el-button.trackbutton:hover {\n  background-color: #409EFF18;\n  border-color: #409EFF00;\n  box-shadow: unset;\n}\n</style>\n"]}, media: undefined });
 
   };
   /* scoped */
-  var __vue_scope_id__$4 = undefined;
+  var __vue_scope_id__$2 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$4 = undefined;
+  var __vue_module_identifier__$2 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$4 = false;
+  var __vue_is_functional_template__$2 = false;
   /* style inject SSR */
   
   /* style inject shadow dom */
   
 
   
-  var __vue_component__$4 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
-    __vue_inject_styles__$4,
-    __vue_script__$4,
-    __vue_scope_id__$4,
-    __vue_is_functional_template__$4,
-    __vue_module_identifier__$4,
+  var __vue_component__$2 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
+    __vue_inject_styles__$2,
+    __vue_script__$2,
+    __vue_scope_id__$2,
+    __vue_is_functional_template__$2,
+    __vue_module_identifier__$2,
     false,
     createInjector,
     undefined,
     undefined
   );
 
+var tryBroadcastMessage = function (data, channel) {
+  if ( data === void 0 ) data={};
+  if ( channel === void 0 ) channel="defaultDayiChannel";
+
+  if(!window.BroadcastChannel) { return void 0; }
+  var broadcastChannel = new window.BroadcastChannel(channel);
+  broadcastChannel.postMessage(data);
+  return broadcastChannel;
+};
+var tryListenBroadcastMessage = function (channel, action) {
+  if ( channel === void 0 ) channel='defaultDayiChannel';
+  if ( action === void 0 ) action=function (){};
+
+  if(!window.BroadcastChannel) { return void 0; }
+  var broadcastChannel = new window.BroadcastChannel(channel);
+  broadcastChannel.onmessage = action;
+  return broadcastChannel;
+};
+var ChannelEnum = {
+  default:'defaultDayiChannel',
+  driverAudit:'dayi-driver-audit',
+  vehicleAudit:'dayi-vehicle-audit',
+};
+Object.freeze(ChannelEnum);
+
+var broadcast = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  tryBroadcastMessage: tryBroadcastMessage,
+  tryListenBroadcastMessage: tryListenBroadcastMessage,
+  ChannelEnum: ChannelEnum
+});
+
+
+
+var index = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  broadcast: broadcast
+});
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var script$3 = {
+  name:'WorkArea',
+  data: function data(){
+    return {
+      minWidth:'auto',
+    };
+  },
+  props:{
+    showDirectory: Boolean,
+    showContent: Boolean,
+    draggable:Boolean,
+    dragStart:Function,
+    dragOver:Function,
+    dragEnd:Function,
+  },
+  computed: {
+    contentStyle: function contentStyle() {
+      var vue = this;
+      return {
+        minWidth: vue.minWidth,
+        maxWidth: vue.minWidth,
+      };
+    },
+  },
+  methods: {
+    handleDragStart: function handleDragStart(evt){
+      var vue = this;
+      if(!vue.draggable) { return; }
+      if(vue.dragStart) {
+        return vue.dragStart(evt, vue.$refs.workarea);
+      }
+      // const data = JSON.stringify(vue.start);
+      // console.log('handleDragStart', evt, 'client properties', clientWidth, offsetLeft, offsetTop, data);
+    },
+    handleDragOver: function handleDragOver(evt) {
+      var vue = this;
+      if(!vue.draggable) { return; }
+      if(vue.dragOver) {
+        return vue.dragOver(evt, vue.$refs.workarea);
+      }
+      var ref = vue.$refs.workarea;
+      var clientWidth = ref.clientWidth;
+      var offsetLeft = ref.offsetLeft;
+      var offsetTop = ref.offsetTop;
+      var rightLeft = clientWidth + offsetLeft - evt.clientX;
+      var minLeft = Math.max(10, clientWidth * 0.05);
+      var maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
+      var percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
+      vue.minWidth = (100-(percent * 100) / clientWidth) + '%';
+    },
+    handleDragEnd: function handleDragEnd(evt) {
+      var vue = this;
+      if(!vue.draggable) { return; }
+      if(vue.dragEnd) {
+        return vue.dragEnd(evt, vue.$refs.workarea);
+      }
+      var ref = vue.$refs.workarea;
+      var clientWidth = ref.clientWidth;
+      var offsetLeft = ref.offsetLeft;
+      var offsetTop = ref.offsetTop;
+      var rightLeft = clientWidth + offsetLeft - evt.clientX;
+      var minLeft = Math.max(10, clientWidth * 0.05);
+      var maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
+      var percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
+      vue.minWidth = (100 - (percent * 100) / clientWidth) + '%';
+    },
+  },
+};
+
+/* script */
+var __vue_script__$3 = script$3;
+
+/* template */
+var __vue_render__$3 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { ref: "workarea", staticClass: "workarea" }, [
+    _vm.showDirectory
+      ? _c(
+          "div",
+          { staticClass: "workarea-left", style: _vm.contentStyle },
+          [_vm._t("directory", [_vm._v("目录内容")])],
+          2
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", {
+      staticClass: "workarea-divider",
+      attrs: { draggable: _vm.draggable },
+      on: {
+        dragstart: _vm.handleDragStart,
+        dragover: _vm.handleDragOver,
+        dragend: _vm.handleDragEnd
+      }
+    }),
+    _vm._v(" "),
+    _vm.showContent
+      ? _c("div", { staticClass: "workarea-right" }, [_vm._t("default")], 2)
+      : _vm._e()
+  ])
+};
+var __vue_staticRenderFns__$3 = [];
+__vue_render__$3._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$3 = function (inject) {
+    if (!inject) { return }
+    inject("data-v-c87f7af8_0", { source: "\n.workarea[data-v-c87f7af8] {\n  display:flex;\n  flex-direction:row;\n  height:100%;\n  width: 100%;\n}\n.workarea-left[data-v-c87f7af8] {\n  height:100%;\n  overflow-y:auto;\n}\n.workarea-divider[data-v-c87f7af8] {\n  min-width:4px;\n  background-color:#fff;\n}\n[draggable=\"true\"].workarea-divider[data-v-c87f7af8]:hover,\n[draggable=\"true\"].workarea-divider[data-v-c87f7af8]:active{\n  filter:invert(0.5);\n  cursor:col-resize;\n}\n.workarea-right[data-v-c87f7af8] {\n  height:100%;\n  flex:1;\n  overflow-y:auto;\n}\n", map: {"version":3,"sources":["/media/liuhanru/mywork/apps/dayi/admin-widget/src/widget/WorkArea.vue"],"names":[],"mappings":";AA+EA;EACA,YAAA;EACA,kBAAA;EACA,WAAA;EACA,WAAA;AACA;AAEA;EACA,WAAA;EACA,eAAA;AACA;AAEA;EACA,aAAA;EACA,qBAAA;AACA;AAEA;;EAEA,kBAAA;EACA,iBAAA;AACA;AAEA;EACA,WAAA;EACA,MAAA;EACA,eAAA;AACA","file":"WorkArea.vue","sourcesContent":["<template>\n<div class=\"workarea\" ref=\"workarea\">\n  <div class=\"workarea-left\" v-if=\"showDirectory\" :style=\"contentStyle\">\n    <slot name=\"directory\">目录内容</slot>\n  </div>\n  <div class=\"workarea-divider\" :draggable=\"draggable\" @dragstart=\"handleDragStart\" @dragover=\"handleDragOver\" @dragend=\"handleDragEnd\">\n  </div>\n  <div class=\"workarea-right\" v-if=\"showContent\">\n    <slot></slot>\n  </div>\n</div>\n</template>\n\n<script>\nexport default {\n  name:'WorkArea',\n  data(){\n    return {\n      minWidth:'auto',\n    };\n  },\n  props:{\n    showDirectory: Boolean,\n    showContent: Boolean,\n    draggable:Boolean,\n    dragStart:Function,\n    dragOver:Function,\n    dragEnd:Function,\n  },\n  computed: {\n    contentStyle() {\n      const vue = this;\n      return {\n        minWidth: vue.minWidth,\n        maxWidth: vue.minWidth,\n      };\n    },\n  },\n  methods: {\n    handleDragStart(evt){\n      const vue = this;\n      if(!vue.draggable) return;\n      if(vue.dragStart) {\n        return vue.dragStart(evt, vue.$refs.workarea);\n      }\n      // const data = JSON.stringify(vue.start);\n      // console.log('handleDragStart', evt, 'client properties', clientWidth, offsetLeft, offsetTop, data);\n    },\n    handleDragOver(evt) {\n      const vue = this;\n      if(!vue.draggable) return;\n      if(vue.dragOver) {\n        return vue.dragOver(evt, vue.$refs.workarea);\n      }\n      const {clientWidth, offsetLeft, offsetTop } = vue.$refs.workarea;\n      const rightLeft = clientWidth + offsetLeft - evt.clientX;\n      const minLeft = Math.max(10, clientWidth * 0.05);\n      const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);\n      const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);\n      vue.minWidth = (100-(percent * 100) / clientWidth) + '%';\n    },\n    handleDragEnd(evt) {\n      const vue = this;\n      if(!vue.draggable) return;\n      if(vue.dragEnd) {\n        return vue.dragEnd(evt, vue.$refs.workarea);\n      }\n      const {clientWidth, offsetLeft, offsetTop } = vue.$refs.workarea;\n      const rightLeft = clientWidth + offsetLeft - evt.clientX;\n      const minLeft = Math.max(10, clientWidth * 0.05);\n      const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);\n      const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);\n      vue.minWidth = (100 - (percent * 100) / clientWidth) + '%';\n    },\n  },\n}\n</script>\n\n<style scoped>\n.workarea {\n  display:flex;\n  flex-direction:row;\n  height:100%;\n  width: 100%;\n}\n\n.workarea-left {\n  height:100%;\n  overflow-y:auto;\n}\n\n.workarea-divider {\n  min-width:4px;\n  background-color:#fff;\n}\n\n[draggable=\"true\"].workarea-divider:hover,\n[draggable=\"true\"].workarea-divider:active{\n  filter:invert(0.5);\n  cursor:col-resize;\n}\n\n.workarea-right {\n  height:100%;\n  flex:1;\n  overflow-y:auto;\n}\n</style>\n"]}, media: undefined });
+
+  };
+  /* scoped */
+  var __vue_scope_id__$3 = "data-v-c87f7af8";
+  /* module identifier */
+  var __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$3 = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$3 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+    __vue_inject_styles__$3,
+    __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );
+
+
+
+var index$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  WorkArea: __vue_component__$3
+});
+
 function install(Vue) {
   if(install.installed) { return; }
   install.installed = true;
-  Vue.component('FundTransferButton', __vue_component__$1);
-  Vue.component('FundTransferDialog', __vue_component__);
-  Vue.component('AmapRoute', __vue_component__$3);
-  Vue.component('WaybillTrack', __vue_component__$4);
+
+  Vue.component('AmapRoute', __vue_component__$1);
+  Vue.component('WaybillTrack', __vue_component__$2);
 }
 
-var fas = {
-  FundTransferButton: __vue_component__$1,
-  FundTransferDialog: __vue_component__,
-};
 var waybill = {
-  AmapRoute: __vue_component__$3,
-  WaybillTrack: __vue_component__$4,
+  AmapRoute: __vue_component__$1,
+  WaybillTrack: __vue_component__$2,
 };
 
 var plugin = {
@@ -1994,4 +1781,4 @@ if (GlobalVue) {
   GlobalVue.use(plugin);
 }
 
-export { fas, install, map_utils as mapUtils, waybill };
+export { index as base, install, map_utils as mapUtils, waybill, index$1 as widgets };
