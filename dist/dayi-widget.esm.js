@@ -1597,24 +1597,25 @@ var index = /*#__PURE__*/Object.freeze({
 });
 
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+var calcLeftWidthPercent = function (evt, ele) {
+  if ( evt === void 0 ) evt={};
+  if ( ele === void 0 ) ele={};
 
+  var clientWidth = ele.clientWidth;
+  var offsetLeft = ele.offsetLeft;
+  var offsetTop = ele.offsetTop;
+  var rightLeft = evt.layerX;
+  console.log('calc',clientWidth, offsetLeft, offsetTop, rightLeft);
+  var minLeft = Math.max(10, clientWidth * 0.05);
+  var maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
+  var percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
+  return (percent * 100) / clientWidth;
+};
 var script$3 = {
   name:'WorkArea',
   data: function data(){
     return {
-      minWidth:'auto',
+      minWidth:'',
     };
   },
   props:{
@@ -1624,13 +1625,14 @@ var script$3 = {
     dragStart:Function,
     dragOver:Function,
     dragEnd:Function,
+    leftBegin:{type:String, default:'auto'},
   },
   computed: {
     contentStyle: function contentStyle() {
       var vue = this;
       return {
-        minWidth: vue.minWidth,
-        maxWidth: vue.minWidth,
+        minWidth: vue.minWidth || vue.leftBegin,
+        maxWidth: vue.minWidth || vue.leftBegin,
       };
     },
   },
@@ -1638,6 +1640,8 @@ var script$3 = {
     handleDragStart: function handleDragStart(evt){
       var vue = this;
       if(!vue.draggable) { return; }
+      var uuid$1 = uuid();
+      vue.uuid = uuid$1;
       if(vue.dragStart) {
         return vue.dragStart(evt, vue.$refs.workarea);
       }
@@ -1646,35 +1650,20 @@ var script$3 = {
     },
     handleDragOver: function handleDragOver(evt) {
       var vue = this;
-      if(!vue.draggable) { return; }
+      if(!vue.draggable || !vue.uuid) { return; }
       if(vue.dragOver) {
         return vue.dragOver(evt, vue.$refs.workarea);
       }
-      var ref = vue.$refs.workarea;
-      var clientWidth = ref.clientWidth;
-      var offsetLeft = ref.offsetLeft;
-      var offsetTop = ref.offsetTop;
-      var rightLeft = clientWidth + offsetLeft - evt.clientX;
-      var minLeft = Math.max(10, clientWidth * 0.05);
-      var maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
-      var percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
-      vue.minWidth = (100-(percent * 100) / clientWidth) + '%';
+      vue.minWidth = calcLeftWidthPercent(evt, vue.$refs.workarea)+'%';
     },
     handleDragEnd: function handleDragEnd(evt) {
       var vue = this;
-      if(!vue.draggable) { return; }
+      if(!vue.draggable || !vue.uuid) { return; }
+      vue.uuid = null;
       if(vue.dragEnd) {
         return vue.dragEnd(evt, vue.$refs.workarea);
       }
-      var ref = vue.$refs.workarea;
-      var clientWidth = ref.clientWidth;
-      var offsetLeft = ref.offsetLeft;
-      var offsetTop = ref.offsetTop;
-      var rightLeft = clientWidth + offsetLeft - evt.clientX;
-      var minLeft = Math.max(10, clientWidth * 0.05);
-      var maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
-      var percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
-      vue.minWidth = (100 - (percent * 100) / clientWidth) + '%';
+      vue.minWidth = calcLeftWidthPercent(evt, vue.$refs.workarea)+'%';
     },
   },
 };
@@ -1718,11 +1707,11 @@ __vue_render__$3._withStripped = true;
   /* style */
   var __vue_inject_styles__$3 = function (inject) {
     if (!inject) { return }
-    inject("data-v-c87f7af8_0", { source: "\n.workarea[data-v-c87f7af8] {\n  display:flex;\n  flex-direction:row;\n  height:100%;\n  width: 100%;\n}\n.workarea-left[data-v-c87f7af8] {\n  height:100%;\n  overflow-y:auto;\n}\n.workarea-divider[data-v-c87f7af8] {\n  min-width:4px;\n  background-color:#fff;\n}\n[draggable=\"true\"].workarea-divider[data-v-c87f7af8]:hover,\n[draggable=\"true\"].workarea-divider[data-v-c87f7af8]:active{\n  filter:invert(0.5);\n  cursor:col-resize;\n}\n.workarea-right[data-v-c87f7af8] {\n  height:100%;\n  flex:1;\n  overflow-y:auto;\n}\n", map: {"version":3,"sources":["/media/liuhanru/mywork/apps/dayi/admin-widget/src/widget/WorkArea.vue"],"names":[],"mappings":";AA+EA;EACA,YAAA;EACA,kBAAA;EACA,WAAA;EACA,WAAA;AACA;AAEA;EACA,WAAA;EACA,eAAA;AACA;AAEA;EACA,aAAA;EACA,qBAAA;AACA;AAEA;;EAEA,kBAAA;EACA,iBAAA;AACA;AAEA;EACA,WAAA;EACA,MAAA;EACA,eAAA;AACA","file":"WorkArea.vue","sourcesContent":["<template>\n<div class=\"workarea\" ref=\"workarea\">\n  <div class=\"workarea-left\" v-if=\"showDirectory\" :style=\"contentStyle\">\n    <slot name=\"directory\">目录内容</slot>\n  </div>\n  <div class=\"workarea-divider\" :draggable=\"draggable\" @dragstart=\"handleDragStart\" @dragover=\"handleDragOver\" @dragend=\"handleDragEnd\">\n  </div>\n  <div class=\"workarea-right\" v-if=\"showContent\">\n    <slot></slot>\n  </div>\n</div>\n</template>\n\n<script>\nexport default {\n  name:'WorkArea',\n  data(){\n    return {\n      minWidth:'auto',\n    };\n  },\n  props:{\n    showDirectory: Boolean,\n    showContent: Boolean,\n    draggable:Boolean,\n    dragStart:Function,\n    dragOver:Function,\n    dragEnd:Function,\n  },\n  computed: {\n    contentStyle() {\n      const vue = this;\n      return {\n        minWidth: vue.minWidth,\n        maxWidth: vue.minWidth,\n      };\n    },\n  },\n  methods: {\n    handleDragStart(evt){\n      const vue = this;\n      if(!vue.draggable) return;\n      if(vue.dragStart) {\n        return vue.dragStart(evt, vue.$refs.workarea);\n      }\n      // const data = JSON.stringify(vue.start);\n      // console.log('handleDragStart', evt, 'client properties', clientWidth, offsetLeft, offsetTop, data);\n    },\n    handleDragOver(evt) {\n      const vue = this;\n      if(!vue.draggable) return;\n      if(vue.dragOver) {\n        return vue.dragOver(evt, vue.$refs.workarea);\n      }\n      const {clientWidth, offsetLeft, offsetTop } = vue.$refs.workarea;\n      const rightLeft = clientWidth + offsetLeft - evt.clientX;\n      const minLeft = Math.max(10, clientWidth * 0.05);\n      const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);\n      const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);\n      vue.minWidth = (100-(percent * 100) / clientWidth) + '%';\n    },\n    handleDragEnd(evt) {\n      const vue = this;\n      if(!vue.draggable) return;\n      if(vue.dragEnd) {\n        return vue.dragEnd(evt, vue.$refs.workarea);\n      }\n      const {clientWidth, offsetLeft, offsetTop } = vue.$refs.workarea;\n      const rightLeft = clientWidth + offsetLeft - evt.clientX;\n      const minLeft = Math.max(10, clientWidth * 0.05);\n      const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);\n      const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);\n      vue.minWidth = (100 - (percent * 100) / clientWidth) + '%';\n    },\n  },\n}\n</script>\n\n<style scoped>\n.workarea {\n  display:flex;\n  flex-direction:row;\n  height:100%;\n  width: 100%;\n}\n\n.workarea-left {\n  height:100%;\n  overflow-y:auto;\n}\n\n.workarea-divider {\n  min-width:4px;\n  background-color:#fff;\n}\n\n[draggable=\"true\"].workarea-divider:hover,\n[draggable=\"true\"].workarea-divider:active{\n  filter:invert(0.5);\n  cursor:col-resize;\n}\n\n.workarea-right {\n  height:100%;\n  flex:1;\n  overflow-y:auto;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-f2a4a2be_0", { source: "\n.workarea[data-v-f2a4a2be] {\n  display:flex;\n  flex-direction:row;\n  height:100%;\n  width: 100%;\n}\n.workarea-left[data-v-f2a4a2be] {\n  height:100%;\n  overflow-y:auto;\n}\n.workarea-divider[data-v-f2a4a2be] {\n  min-width:4px;\n  background-color:#fff;\n}\n[draggable=\"true\"].workarea-divider[data-v-f2a4a2be]:hover,\n[draggable=\"true\"].workarea-divider[data-v-f2a4a2be]:active{\n  filter:invert(0.5);\n  cursor:col-resize;\n}\n.workarea-right[data-v-f2a4a2be] {\n  height:100%;\n  flex:1;\n  overflow-y:auto;\n}\n", map: {"version":3,"sources":["/media/liuhanru/mywork/apps/dayi/admin-widget/src/widget/WorkArea.vue"],"names":[],"mappings":";AAmFA;EACA,YAAA;EACA,kBAAA;EACA,WAAA;EACA,WAAA;AACA;AAEA;EACA,WAAA;EACA,eAAA;AACA;AAEA;EACA,aAAA;EACA,qBAAA;AACA;AAEA;;EAEA,kBAAA;EACA,iBAAA;AACA;AAEA;EACA,WAAA;EACA,MAAA;EACA,eAAA;AACA","file":"WorkArea.vue","sourcesContent":["<template>\n<div class=\"workarea\" ref=\"workarea\">\n  <div class=\"workarea-left\" v-if=\"showDirectory\" :style=\"contentStyle\">\n    <slot name=\"directory\">目录内容</slot>\n  </div>\n  <div class=\"workarea-divider\" :draggable=\"draggable\" @dragstart=\"handleDragStart\" @dragover=\"handleDragOver\" @dragend=\"handleDragEnd\">\n  </div>\n  <div class=\"workarea-right\" v-if=\"showContent\">\n    <slot></slot>\n  </div>\n</div>\n</template>\n\n<script>\nimport * as simpleUUIdv4 from 'simple-uuidv4';\nconst calcLeftWidthPercent = (evt={}, ele={}) => {\n  const {clientWidth, offsetLeft, offsetTop } = ele;\n  const {layerX:rightLeft} = evt;\n  console.log('calc',clientWidth, offsetLeft, offsetTop, rightLeft);\n  const minLeft = Math.max(10, clientWidth * 0.05);\n  const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);\n  const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);\n  return (percent * 100) / clientWidth;\n}\nexport default {\n  name:'WorkArea',\n  data(){\n    return {\n      minWidth:'',\n    };\n  },\n  props:{\n    showDirectory: Boolean,\n    showContent: Boolean,\n    draggable:Boolean,\n    dragStart:Function,\n    dragOver:Function,\n    dragEnd:Function,\n    leftBegin:{type:String, default:'auto'},\n  },\n  computed: {\n    contentStyle() {\n      const vue = this;\n      return {\n        minWidth: vue.minWidth || vue.leftBegin,\n        maxWidth: vue.minWidth || vue.leftBegin,\n      };\n    },\n  },\n  methods: {\n    handleDragStart(evt){\n      const vue = this;\n      if(!vue.draggable) return;\n      const uuid = simpleUUIdv4.uuid();\n      vue.uuid = uuid;\n      if(vue.dragStart) {\n        return vue.dragStart(evt, vue.$refs.workarea);\n      }\n      // const data = JSON.stringify(vue.start);\n      // console.log('handleDragStart', evt, 'client properties', clientWidth, offsetLeft, offsetTop, data);\n    },\n    handleDragOver(evt) {\n      const vue = this;\n      if(!vue.draggable || !vue.uuid) return;\n      if(vue.dragOver) {\n        return vue.dragOver(evt, vue.$refs.workarea);\n      }\n      vue.minWidth = calcLeftWidthPercent(evt, vue.$refs.workarea)+'%';\n    },\n    handleDragEnd(evt) {\n      const vue = this;\n      if(!vue.draggable || !vue.uuid) return;\n      vue.uuid = null;\n      if(vue.dragEnd) {\n        return vue.dragEnd(evt, vue.$refs.workarea);\n      }\n      vue.minWidth = calcLeftWidthPercent(evt, vue.$refs.workarea)+'%';\n    },\n  },\n}\n</script>\n\n<style scoped>\n.workarea {\n  display:flex;\n  flex-direction:row;\n  height:100%;\n  width: 100%;\n}\n\n.workarea-left {\n  height:100%;\n  overflow-y:auto;\n}\n\n.workarea-divider {\n  min-width:4px;\n  background-color:#fff;\n}\n\n[draggable=\"true\"].workarea-divider:hover,\n[draggable=\"true\"].workarea-divider:active{\n  filter:invert(0.5);\n  cursor:col-resize;\n}\n\n.workarea-right {\n  height:100%;\n  flex:1;\n  overflow-y:auto;\n}\n</style>\n"]}, media: undefined });
 
   };
   /* scoped */
-  var __vue_scope_id__$3 = "data-v-c87f7af8";
+  var __vue_scope_id__$3 = "data-v-f2a4a2be";
   /* module identifier */
   var __vue_module_identifier__$3 = undefined;
   /* functional template */

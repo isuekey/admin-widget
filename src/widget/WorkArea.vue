@@ -12,11 +12,21 @@
 </template>
 
 <script>
+import * as simpleUUIdv4 from 'simple-uuidv4';
+const calcLeftWidthPercent = (evt={}, ele={}) => {
+  const {clientWidth, offsetLeft, offsetTop } = ele;
+  const {layerX:rightLeft} = evt;
+  console.log('calc',clientWidth, offsetLeft, offsetTop, rightLeft);
+  const minLeft = Math.max(10, clientWidth * 0.05);
+  const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
+  const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
+  return (percent * 100) / clientWidth;
+}
 export default {
   name:'WorkArea',
   data(){
     return {
-      minWidth:'auto',
+      minWidth:'',
     };
   },
   props:{
@@ -26,13 +36,14 @@ export default {
     dragStart:Function,
     dragOver:Function,
     dragEnd:Function,
+    leftBegin:{type:String, default:'auto'},
   },
   computed: {
     contentStyle() {
       const vue = this;
       return {
-        minWidth: vue.minWidth,
-        maxWidth: vue.minWidth,
+        minWidth: vue.minWidth || vue.leftBegin,
+        maxWidth: vue.minWidth || vue.leftBegin,
       };
     },
   },
@@ -40,6 +51,8 @@ export default {
     handleDragStart(evt){
       const vue = this;
       if(!vue.draggable) return;
+      const uuid = simpleUUIdv4.uuid();
+      vue.uuid = uuid;
       if(vue.dragStart) {
         return vue.dragStart(evt, vue.$refs.workarea);
       }
@@ -48,29 +61,20 @@ export default {
     },
     handleDragOver(evt) {
       const vue = this;
-      if(!vue.draggable) return;
+      if(!vue.draggable || !vue.uuid) return;
       if(vue.dragOver) {
         return vue.dragOver(evt, vue.$refs.workarea);
       }
-      const {clientWidth, offsetLeft, offsetTop } = vue.$refs.workarea;
-      const rightLeft = clientWidth + offsetLeft - evt.clientX;
-      const minLeft = Math.max(10, clientWidth * 0.05);
-      const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
-      const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
-      vue.minWidth = (100-(percent * 100) / clientWidth) + '%';
+      vue.minWidth = calcLeftWidthPercent(evt, vue.$refs.workarea)+'%';
     },
     handleDragEnd(evt) {
       const vue = this;
-      if(!vue.draggable) return;
+      if(!vue.draggable || !vue.uuid) return;
+      vue.uuid = null;
       if(vue.dragEnd) {
         return vue.dragEnd(evt, vue.$refs.workarea);
       }
-      const {clientWidth, offsetLeft, offsetTop } = vue.$refs.workarea;
-      const rightLeft = clientWidth + offsetLeft - evt.clientX;
-      const minLeft = Math.max(10, clientWidth * 0.05);
-      const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
-      const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
-      vue.minWidth = (100 - (percent * 100) / clientWidth) + '%';
+      vue.minWidth = calcLeftWidthPercent(evt, vue.$refs.workarea)+'%';
     },
   },
 }
