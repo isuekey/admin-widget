@@ -15,8 +15,9 @@
 import * as simpleUUIdv4 from 'simple-uuidv4';
 const calcLeftWidthPercent = (evt={}, ele={}) => {
   const {clientWidth, offsetLeft, offsetTop } = ele;
-  const {layerX:rightLeft} = evt;
-  console.log('calc',clientWidth, offsetLeft, offsetTop, rightLeft);
+  const {pageX} = evt;
+  // console.log('calc',clientWidth, offsetLeft, offsetTop, rightLeft, evt);
+  const rightLeft = pageX - offsetLeft;
   const minLeft = Math.max(10, clientWidth * 0.05);
   const maxLeft = Math.max(clientWidth - 10,  clientWidth * 0.95);
   const percent = rightLeft < minLeft ? minLeft : (rightLeft > maxLeft ? maxLeft : rightLeft);
