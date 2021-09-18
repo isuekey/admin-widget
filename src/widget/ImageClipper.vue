@@ -99,7 +99,11 @@ export default {
     drawRect(){
       const vue = this;
       const ctx2d = vue.clipperBase.ctx2d;
-      ctx2d.rect()
+      const x = vue.clipperBase.start.pageX - vue.clipperBase.rect.offsetLeft;
+      const y = vue.clipperBase.start.pageY - vue.clipperBase.rect.offsetTop;
+      const wx = vue.clipperBase.end.pageX - vue.clipperBase.start.pageX;
+      const wy = vue.clipperBase.end.pageY - vue.clipperBase.start.pageY;
+      ctx2d.rect(x, y, wx, wy);
     },
     endDrawRect(){
       const vue = this;
