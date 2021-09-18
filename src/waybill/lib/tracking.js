@@ -193,10 +193,8 @@ const drawTrackPassPoint = (vue, trackPartList, category="lines") => {
           if(isOver) {
             accumulateDistance = 0;
           }
-          // console.log('accumulateDistance', accumulateDistance, 'isOver', isOver, ele.trackDistance, ele);
           return isSpecial || isOver;
         });
-        // console.log('drawTrack', resolution, step, drawTrack);
         return drawTrack.map(trackEle => {
           const newTrackMarker = drawPassPointMarker(categoryMarkerMap, trackEle, amap, container, vue);
           container.add(newTrackMarker);
@@ -274,7 +272,10 @@ const shinningTheMarker = (marker) => {
   shinningMap.set(marker, interval);
 };
 const lorryMap = new WeakMap();
-const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
+const prepareLorryMarker = (vue, passPointArray=[], type="lorry", alongHandle, endHandle) => {
+  if(passPointArray.length == 0) {
+    return Promise.reject('缺少途径轨迹坐标');
+  }
   return confirmAmap(vue).then(([amap, container]) => {
     let lorryMarker = lorryMap.get(vue.amapResolve);
     const trackEle = passPointArray[0];
@@ -294,6 +295,9 @@ const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
         offset: new (Function.prototype.bind.apply(amap.Pixel,[amap.Pixel, ...config.offset])),
         extData:type,
       });
+      lorryMarker.on('moving', function(event) {
+        alongHandle && alongHandle.apply && alongHandle.call(vue, event);
+      });
       lorryMarker.on('movealong', function(event){
         if(vue.isRunning) {
           shinningTheMarker(lorryMarker);
@@ -301,13 +305,11 @@ const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
       });
       lorryMarker.on('moveend', function(event){
         // vue.handleMoveOnPoint(event);
-        // console.log('event end', event.target.get)
         const weakMap = validPointMap.get(vue.amapResolve) || {};
         validPointMap.set(vue.amapResolve, weakMap);
         const position = event.target.getPosition();
         const uid = mapBase.getKeyOfPoint([position.lng, position.lat]);
         const trackEle = weakMap[uid];
-        // console.log('move end', event, uid, trackEle);
         if(vue.selectedPoint || vue.focusedPoint) return;
         newInfoWindow(vue, trackEle).then(([infoWindow, amap, container]) =>{
           if(!infoWindow.getIsOpen()){
@@ -316,6 +318,7 @@ const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
             infoWindow.setPosition(position);
           }
         });
+        endHandle && endHandle.apply && endHandle.call(vue, event);
       });
       container.add(lorryMarker);
       lorryMarker.show();
@@ -324,9 +327,8 @@ const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
     return [lorryMarker, amap, container, position];
   });
 };
-const drawLorryMove = (vue, passPointArray=[], type="lorry") => {
-  return prepareLorryMarker(vue, passPointArray, type).then(([lorryMarker, amap, container, position]) => {
-    // console.log('lorry marker move', lorryMarker, lorryMap.has(vue.amapResolve));
+const drawLorryMove = (vue, passPointArray=[], type="lorry",alongHandle,  endHandle) => {
+  return prepareLorryMarker(vue, passPointArray, type, alongHandle, endHandle).then(([lorryMarker, amap, container, position]) => {
     clearShinning(lorryMarker);
     lorryMarker.stopMove();
     let resolution = container.getResolution(position);
@@ -359,7 +361,6 @@ const newInfoWindow = (vue, trackPoint) => {
 const moveLorryTo = (vue, passPointArray=[], type="lorry", emit=false) => {
   const lastPointArray = passPointArray.reverse();
   return prepareLorryMarker(vue, lastPointArray, type).then(([lorryMarker, amap, container, position]) => {
-    // console.log('lorry marker move', lorryMarker, lorryMap.has(vue.amapResolve));
     clearShinning(lorryMarker);
     lorryMarker.stopMove();
     const lastPoint = lastPointArray[0];

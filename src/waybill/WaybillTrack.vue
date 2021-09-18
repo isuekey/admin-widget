@@ -11,7 +11,7 @@
         <div class="user-phone plate-code"><span>{{driverInfo.carPlate}}</span></div>
       </div>
       <div class="track-playback">
-        <el-button v-if="showPlayBack" :disabled="disablePlayTrack" plain type="default" size="mini" @click="handlePlayback" class="trackbutton margin-bottom-8">轨迹回放</el-button>
+        <el-button v-if="showPlayBack" :disabled="disablePlayTrack" plain type="default" size="mini" @click="listenClickPlayback" class="trackbutton margin-bottom-8">轨迹回放</el-button>
         <!-- <el-button 
          plain type="default" size="mini" @click="refreshTrack" class="trackbutton margin-bottom-8"
          v-if="baseInfo.waybillStatus == 3"
@@ -28,18 +28,34 @@
         <el-button v-if="showDriverTrack" type="default" size="mini" @click="moveToEnd('driver')">司机实时位置</el-button>
       </div>
     </div>
+    <div class="track-playing" v-show="showPlayTrackController">
+      <div class="flex-row track-control">
+        <span @click="resumePlaying" v-show="playingStatus == 'pause'"><resume /></span>
+        <span @click="pausePlaying" v-show="playingStatus == 'playing'"><pause /></span>
+        <span @click="stopPlaying" v-show="playingStatus != 'stop'"><stop /></span>
+      </div>
+      <div class="flex-row" v-if="false">
+        <input type="range" ref="playTrackProgressController"></input>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import * as simpleUUIdv4 from 'simple-uuidv4';
 import * as mapUtils from './lib/map.utils.js';
+import Pause from './components/Pause.vue';
+import Resume from './components/Resume.vue';
+import Stop from './components/Stop.vue';
 const typeSwitch = {
   primary:'info', info:'primary'
 };
 const deviceMapping = mapUtils.base.glossary.deviceMapping;
 export default {
   name:'WaybillTrack',
+  components: {
+    Pause, Resume, Stop,
+  },
   props: {
     trackInfo: { type: Object, default() { return {}; }, },
     baseInfo: { type: Object, default() { return {}; }, },
@@ -63,6 +79,11 @@ export default {
     isRunning:{ type:Boolean, default:false, },
     emitLastPosition:Boolean,
     pointDensity: { type: Number, default: 30 },
+    trackUnionLine: Boolean,
+    loadActionType: { type: [Number, String, Object], default:2 },
+    unloadActionType: { type: [Number, String, Object], default:3 },
+    avoid:Array,
+    showPlayControlPanel: Boolean,
   },
   data(){
     const uuid = simpleUUIdv4.uuid();
@@ -77,14 +98,19 @@ export default {
       trackTypeOfDriver:'primary',
       trackPath:{},
       focusedPoint:null,
-    } 
+      playingTrack:false,
+      playingStatus:'stop',
+      lorryMarker:null,
+    };
   },
   computed:{
     disablePlayTrack() {
       const vue = this;
       const moveDriver = !!(vue.driverActive && vue.showDriverTrack);
       const moveVehicle = !!(vue.vehicleActive && vue.showVehicleTrack);
-      const disabled = (moveDriver + moveVehicle)%2 == 0;
+      const onlyOneSelect = moveDriver != moveVehicle;
+      const couldMoveUnion = moveDriver && moveVehicle && vue.trackUnionLine;
+      const disabled = !(onlyOneSelect || couldMoveUnion);
       return disabled;
     },
     showUnionTrack(){
@@ -98,6 +124,11 @@ export default {
     showVehicleTrack(){
       const vue = this;
       return (vue.showTrackType & mapUtils.base.glossary.pathType.vehicle);
+    },
+    showPlayTrackController() {
+      const vue = this;
+      if(vue.disablePlayTrack) return false;
+      return vue.playingTrack && vue.showPlayControlPanel;
     },
     driverActive() {
       const vue = this;
@@ -121,39 +152,38 @@ export default {
     })
   },
   methods: {
-    getAciontRange(){
+    getActionRange(){
       const vue = this;
       const driverAction = vue.trackInfo && vue.trackInfo.driverOperate;
-      const startPoint = mapUtils.loadUnload.findDriverAction(driverAction, 2);
-      const endPoint = mapUtils.loadUnload.findDriverAction(driverAction, 3);
-      return [startPoint, endPoint];
+      const startPointList = mapUtils.loadUnload.findDriverActionList(driverAction, vue.loadActionType);
+      const endPointList = mapUtils.loadUnload.findDriverActionList(driverAction, vue.unloadActionType);
+      return [startPointList, endPointList];
     },
     drawTrackAll() {
       const vue = this;
       mapUtils.loadUnload.renderTheRoute(vue).then(ok => {
-        const [startPoint, endPoint] = vue.getAciontRange();
-        return Promise.all([mapUtils.loadUnload.renderTheAction(vue, startPoint, endPoint), startPoint, endPoint, vue.containerResolve]);
-      }).then(([ok, startPoint, endPoint, container]) => {
+        const [startPointList, endPointList] = vue.getActionRange();
+        return Promise.all([mapUtils.loadUnload.renderTheAction(vue, startPointList, endPointList), startPointList, endPointList, vue.containerResolve]);
+      }).then(([ok, startPointList, endPointList, container]) => {
         if(!vue._handleDrawPassPoint) {
           container.on('zoomend', (event) =>{
-            vue.drawTrackPath(startPoint, endPoint);
+            vue.drawTrackPath(startPointList, endPointList);
           });
           vue._handleDrawPassPoint = vue.drawTrackPath;
         }
-        vue.drawTrackPath(startPoint, endPoint);
+        vue.drawTrackPath(startPointList, endPointList);
       }).then(ok => {
-        // console.log('selectedPoint', vue.selectedPoint);
         if(!vue.selectedPoint) return mapUtils.tracking.hideInfoWindow(vue);
         return mapUtils.tracking.showInfoWindowOfPoint(vue, vue.selectedPoint);
       }).catch(err=>{
         console.log(err);
       });
     },
-    drawTrackPath(startPoint, endPoint) {
+    drawTrackPath(startPointList, endPointList) {
       const vue = this;
       const trackPath =  vue.trackPath;
       const copy = vue.trackInfo && vue.trackInfo.realtime.slice() || [];
-      const realtime = [endPoint].concat(copy).concat([startPoint]).filter(ele => !!ele).reverse();
+      const realtime = endPointList.concat(copy).concat(startPointList).filter(ele => !!ele).reverse();
       const drawTrackPathHandle = (pathArray, pathColor, category="lines") => {
         return mapUtils.tracking.getValidPathArray(vue, pathArray).then((paths) => {
           const trackParts = mapUtils.tracking.getTrackParts(paths);
@@ -179,6 +209,13 @@ export default {
       };
       return Promise.all([trackPath.all, trackPath.driver, trackPath.vehicle]);
     },
+    listenClickPlayback(){
+      const vue = this;
+      vue.playingTrack = true;
+      vue.handlePlayback().catch(err => {
+        console.log('err', err);
+      });
+    },
     handlePlayback() {
       const vue = this;
       vue.focusedPoint = null;
@@ -186,31 +223,68 @@ export default {
       const willMoveDriver = vue.showDriverTrack && vue.driverActive;
       const willMoveVehicle = vue.showVehicleTrack && vue.vehicleActive;
       const willMoveOnUnion = vue.showUnionTrack || (willMoveDriver && willMoveVehicle);
+      const defineLorryMarker = (lorryMarker) => {
+        vue.lorryMarker = lorryMarker;
+        lorryMarker.show();
+        vue.playingStatus = 'playing';
+      };
       if (willMoveOnUnion) {
         return mapUtils.tracking.getValidPathArray(vue, realtime).then((paths) => {
-          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);
-        });
+          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType, vue.handleAlongPlaying, vue.handleStopPlaying);
+        }).then(defineLorryMarker);
       } else if (willMoveDriver) {
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin == mapUtils.base.glossary.pointType.app)).then((paths) => {
-          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);
-        });
+          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType, vue.handleAlongPlaying, vue.handleStopPlaying);
+        }).then(defineLorryMarker);
       } else if (willMoveVehicle) {
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin != mapUtils.base.glossary.pointType.app)).then((paths) => {
-          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);
-        });
+          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType, vue.handleAlongPlaying, vue.handleStopPlaying);
+        }).then(defineLorryMarker);
+      } else {
+        return Promise.reject('未知的操作类型');
       }
+    },
+    resumePlaying() {
+      const vue = this;
+      if(!vue.lorryMarker) return;
+      vue.playingStatus = 'playing';
+      vue.lorryMarker.resumeMove();
+    },
+    pausePlaying() {
+      const vue = this;
+      if(!vue.lorryMarker) return;
+      vue.lorryMarker.pauseMove();
+      vue.playingStatus = 'pause';
+    },
+    stopPlaying() {
+      const vue = this;
+      if(!vue.lorryMarker) return;
+      vue.lorryMarker.stopMove();
+      vue.lorryMarker.hide();
+      vue.playingStatus = '';
+      vue.playingTrack = false;
+    },
+    handleStopPlaying(event) {
+      const vue = this;
+      if(!vue.lorryMarker) return;
+      // vue.playingStatus = 'stop';
+      console.log('stop event', event);
+    },
+    handleAlongPlaying(event) {
+      const vue = this;
+      // console.log('along event', event);
     },
     changeTrack(target){
       const vue = this;
-      const [startPoint, endPoint] = vue.getAciontRange();
+      const [startPointList, endPointList] = vue.getActionRange();
       switch(target) {
       case 'vehicle':
         vue.trackTypeOfVehicle = typeSwitch[vue.trackTypeOfVehicle];
-        vue.drawTrackPath(startPoint, endPoint);
+        vue.drawTrackPath(startPointList, endPointList);
         break;
       case 'driver':
         vue.trackTypeOfDriver = typeSwitch[vue.trackTypeOfDriver];
-        vue.drawTrackPath(startPoint, endPoint);
+        vue.drawTrackPath(startPointList, endPointList);
         break;
       default:
         return;
@@ -219,7 +293,6 @@ export default {
     getInfoWindowContent(trackInfo){
       const vue = this;
       let velocity = [];
-      // console.log('velocity in track', trackInfo);
       if (trackInfo.velocity) {
         velocity=[
           '<div style="display:flex;padding-top:4px;"><div style="width:60px;text-align:left;font-size:12px">速度</div><span style="font-size:12px">',
@@ -366,5 +439,23 @@ export default {
   background-color: #409EFF18;
   border-color: #409EFF00;
   box-shadow: unset;
+}
+
+.track-playing {
+  background: transparent;
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
+.track-control {
+  min-width:100px;
+  justify-content: space-evenly;
+}
+.track-control > span {
+  display:inline-block;
+  height:14px;
+  width:14px;
+  background-size:contain;
+  background-repeat:no-repeat;
 }
 </style>

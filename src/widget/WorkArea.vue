@@ -3,7 +3,7 @@
   <div class="workarea-left" v-if="showDirectory" :style="contentStyle">
     <slot name="directory">目录内容</slot>
   </div>
-  <div class="workarea-divider" :draggable="draggable" @dragstart="handleDragStart" @dragover="handleDragOver" @dragend="handleDragEnd">
+  <div class="workarea-divider" :draggable="sliding" @dragstart="handleDragStart" @dragover="handleDragOver" @dragend="handleDragEnd">
   </div>
   <div class="workarea-right" v-if="showContent">
     <slot></slot>
@@ -33,7 +33,7 @@ export default {
   props:{
     showDirectory: Boolean,
     showContent: Boolean,
-    draggable:Boolean,
+    sliding:Boolean,
     dragStart:Function,
     dragOver:Function,
     dragEnd:Function,
@@ -51,7 +51,7 @@ export default {
   methods: {
     handleDragStart(evt){
       const vue = this;
-      if(!vue.draggable) return;
+      if(!vue.sliding) return;
       const uuid = simpleUUIdv4.uuid();
       vue.uuid = uuid;
       if(vue.dragStart) {
@@ -62,7 +62,7 @@ export default {
     },
     handleDragOver(evt) {
       const vue = this;
-      if(!vue.draggable || !vue.uuid) return;
+      if(!vue.sliding || !vue.uuid) return;
       if(vue.dragOver) {
         return vue.dragOver(evt, vue.$refs.workarea);
       }
@@ -70,7 +70,7 @@ export default {
     },
     handleDragEnd(evt) {
       const vue = this;
-      if(!vue.draggable || !vue.uuid) return;
+      if(!vue.sliding || !vue.uuid) return;
       vue.uuid = null;
       if(vue.dragEnd) {
         return vue.dragEnd(evt, vue.$refs.workarea);
@@ -96,13 +96,14 @@ export default {
 
 .workarea-divider {
   min-width:4px;
-  background-color:#fff;
+  background-color:transparent;
 }
 
 [draggable="true"].workarea-divider:hover,
 [draggable="true"].workarea-divider:active{
   filter:invert(0.5);
   cursor:col-resize;
+  background-color:#fff;
 }
 
 .workarea-right {
