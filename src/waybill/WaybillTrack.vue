@@ -20,12 +20,12 @@
     </div>
     <div class="track-tabs">
       <div class="flex-row" v-if="true">
-        <el-button style="width:116px" v-if="showDriverTrack" :type="trackTypeOfVehicle" size="mini" @click="changeTrack('vehicle')">车辆轨迹</el-button>
-        <el-button style="width:116px" v-if="showVehicleTrack" :type="trackTypeOfDriver" size="mini" @click="changeTrack('driver')">司机轨迹</el-button>
+        <el-button style="width:116px" v-if="showVehicleTrack" :type="trackTypeOfVehicle" size="mini" @click="changeTrack('vehicle')">车辆轨迹</el-button>
+        <el-button style="width:116px" v-if="showDriverTrack" :type="trackTypeOfDriver" size="mini" @click="changeTrack('driver')">司机轨迹</el-button>
       </div>
       <div class="flex-row padding-top-4" v-if="true">
-        <el-button v-if="showDriverTrack" type="default" size="mini" @click="moveToEnd('vehicle')">车辆实时位置</el-button>
-        <el-button v-if="showVehicleTrack" type="default" size="mini" @click="moveToEnd('driver')">司机实时位置</el-button>
+        <el-button v-if="showVehicleTrack" type="default" size="mini" @click="moveToEnd('vehicle')">车辆实时位置</el-button>
+        <el-button v-if="showDriverTrack" type="default" size="mini" @click="moveToEnd('driver')">司机实时位置</el-button>
       </div>
     </div>
   </div>
