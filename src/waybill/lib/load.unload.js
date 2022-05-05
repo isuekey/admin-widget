@@ -170,41 +170,52 @@ const renderTheRoute = (vue) => {
   });
 };
 
-const renderTheAction = (vue, startPoint={}, endPoint={}) => {
+const renderTheAction = (vue, startPointList=[], endPointList=[]) => {
   return mapBase.prepareMap(vue).then(ok => {
     return Promise.all([vue.amapResolve, vue.containerResolve]);
   }).then(([amap, container]) => {
-    const actionMarker = {};
-    if(!!startPoint.lng && !!startPoint.lat) {
-      actionMarker.startKey = getKeyOfPoint([startPoint.lng, startPoint.lat]);
-      actionMarker.start = drawMarker(amap, container, [startPoint.lng, startPoint.lat], {
+    const actionMarkerKeySet = {};
+    let xoff = 0;
+    const hasGeoAxisFilter = ele => !!ele.lng && !!ele.lat;
+    const startMarkerDrawingList = startPointList.filter(hasGeoAxisFilter).map(startPoint => {
+      const geoAxis = [startPoint.lng, startPoint.lat];
+      const key = getKeyOfPoint(geoAxis);
+      if(actionMarkerKeySet[key]) {
+        xoff += 10;
+      }
+      actionMarkerKeySet[key] = true;
+      return drawMarker(amap, container, geoAxis, {
         image: loadActionMarker,
         size:[41, 62],
-        offset:[-21, -61],
+        offset:[-21 + xoff, -61],
       }, 'start');
-    };
-    if(!!endPoint.lng && !!endPoint.lat) {
-      actionMarker.endKey = getKeyOfPoint([endPoint.lng, endPoint.lat]);
-      const xoff = actionMarker.startKey == actionMarker.endKey ? 10 : 0;
-      actionMarker.end = drawMarker(amap, container, [endPoint.lng, endPoint.lat], {
+    });
+    const endMarkerDrawingList = endPointList.filter(hasGeoAxisFilter).map(endPoint => {
+      const geoAxis = [endPoint.lng, endPoint.lat];
+      const key = getKeyOfPoint(geoAxis);
+      if(actionMarkerKeySet[key]) {
+        xoff += 10;
+      };
+      actionMarkerKeySet[key] = true;
+      return drawMarker(amap, container, [endPoint.lng, endPoint.lat], {
         image: unloadActionMarker,
         size:[41, 62],
         offset:[-21 + xoff, -61],
       }, 'end');
-    };
-    return Promise.all([actionMarker.start, actionMarker.end]);
+    });
+    return Promise.all(startMarkerDrawingList.concat(endMarkerDrawingList));
   });
 };
-const findDriverAction = (driverOperateList=[], type=-1) => {
+const findDriverActionList = (driverOperateList=[], type=-1) => {
   return driverOperateList.filter(ele => ele.operateTypeLm == type).map(ele => {
     return Object.assign({}, ele, {
       lng:ele.operateLon, lat:ele.operateLat,
     });
-  })[0];
+  });
 };
 
 export {
   renderTheRoute,
   renderTheAction,
-  findDriverAction,
+  findDriverActionList,
 }

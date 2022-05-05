@@ -11,7 +11,7 @@
         <div class="user-phone plate-code"><span>{{driverInfo.carPlate}}</span></div>
       </div>
       <div class="track-playback">
-        <el-button v-if="showPlayBack" :disabled="disablePlayTrack" plain type="default" size="mini" @click="handlePlayback" class="trackbutton margin-bottom-8">轨迹回放</el-button>
+        <el-button v-if="showPlayBack" :disabled="disablePlayTrack" plain type="default" size="mini" @click="listenClickPlayback" class="trackbutton margin-bottom-8">轨迹回放</el-button>
         <!-- <el-button 
          plain type="default" size="mini" @click="refreshTrack" class="trackbutton margin-bottom-8"
          v-if="baseInfo.waybillStatus == 3"
@@ -26,6 +26,13 @@
       <div class="flex-row padding-top-4" v-if="true">
         <el-button v-if="showVehicleTrack" type="default" size="mini" @click="moveToEnd('vehicle')">车辆实时位置</el-button>
         <el-button v-if="showDriverTrack" type="default" size="mini" @click="moveToEnd('driver')">司机实时位置</el-button>
+      </div>
+    </div>
+    <div class="track-playing">
+      <div class="flex-row">
+        
+      </div>
+      <div class="flex-row">
       </div>
     </div>
   </div>
@@ -63,6 +70,7 @@ export default {
     isRunning:{ type:Boolean, default:false, },
     emitLastPosition:Boolean,
     pointDensity: { type: Number, default: 30 },
+    trackUnionLine: Boolean
   },
   data(){
     const uuid = simpleUUIdv4.uuid();
@@ -84,7 +92,9 @@ export default {
       const vue = this;
       const moveDriver = !!(vue.driverActive && vue.showDriverTrack);
       const moveVehicle = !!(vue.vehicleActive && vue.showVehicleTrack);
-      const disabled = (moveDriver + moveVehicle)%2 == 0;
+      const onlyOneSelect = moveDriver != moveVehicle;
+      const couldMoveUnion = moveDriver && moveVehicle && vue.trackUnionLine;
+      const disabled = !(onlyOneSelect || couldMoveUnion);
       return disabled;
     },
     showUnionTrack(){
@@ -121,39 +131,38 @@ export default {
     })
   },
   methods: {
-    getAciontRange(){
+    getActionRange(){
       const vue = this;
       const driverAction = vue.trackInfo && vue.trackInfo.driverOperate;
-      const startPoint = mapUtils.loadUnload.findDriverAction(driverAction, 2);
-      const endPoint = mapUtils.loadUnload.findDriverAction(driverAction, 3);
-      return [startPoint, endPoint];
+      const startPointList = mapUtils.loadUnload.findDriverActionList(driverAction, 2);
+      const endPointList = mapUtils.loadUnload.findDriverActionList(driverAction, 3);
+      return [startPointList, endPointList];
     },
     drawTrackAll() {
       const vue = this;
       mapUtils.loadUnload.renderTheRoute(vue).then(ok => {
-        const [startPoint, endPoint] = vue.getAciontRange();
-        return Promise.all([mapUtils.loadUnload.renderTheAction(vue, startPoint, endPoint), startPoint, endPoint, vue.containerResolve]);
-      }).then(([ok, startPoint, endPoint, container]) => {
+        const [startPointList, endPointList] = vue.getActionRange();
+        return Promise.all([mapUtils.loadUnload.renderTheAction(vue, startPointList, endPointList), startPointList, endPointList, vue.containerResolve]);
+      }).then(([ok, startPointList, endPointList, container]) => {
         if(!vue._handleDrawPassPoint) {
           container.on('zoomend', (event) =>{
-            vue.drawTrackPath(startPoint, endPoint);
+            vue.drawTrackPath(startPointList, endPointList);
           });
           vue._handleDrawPassPoint = vue.drawTrackPath;
         }
-        vue.drawTrackPath(startPoint, endPoint);
+        vue.drawTrackPath(startPointList, endPointList);
       }).then(ok => {
-        // console.log('selectedPoint', vue.selectedPoint);
         if(!vue.selectedPoint) return mapUtils.tracking.hideInfoWindow(vue);
         return mapUtils.tracking.showInfoWindowOfPoint(vue, vue.selectedPoint);
       }).catch(err=>{
         console.log(err);
       });
     },
-    drawTrackPath(startPoint, endPoint) {
+    drawTrackPath(startPointList, endPointList) {
       const vue = this;
       const trackPath =  vue.trackPath;
       const copy = vue.trackInfo && vue.trackInfo.realtime.slice() || [];
-      const realtime = [endPoint].concat(copy).concat([startPoint]).filter(ele => !!ele).reverse();
+      const realtime = endPointList.concat(copy).concat(startPointList).filter(ele => !!ele).reverse();
       const drawTrackPathHandle = (pathArray, pathColor, category="lines") => {
         return mapUtils.tracking.getValidPathArray(vue, pathArray).then((paths) => {
           const trackParts = mapUtils.tracking.getTrackParts(paths);
@@ -179,6 +188,12 @@ export default {
       };
       return Promise.all([trackPath.all, trackPath.driver, trackPath.vehicle]);
     },
+    listenClickPlayback(){
+      const vue = this;
+      vue.handlePlayback().catch(err => {
+        console.log('err', err);
+      });
+    },
     handlePlayback() {
       const vue = this;
       vue.focusedPoint = null;
@@ -198,19 +213,21 @@ export default {
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin != mapUtils.base.glossary.pointType.app)).then((paths) => {
           return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);
         });
+      } else {
+        return Promise.reject('未知的操作类型');
       }
     },
     changeTrack(target){
       const vue = this;
-      const [startPoint, endPoint] = vue.getAciontRange();
+      const [startPointList, endPointList] = vue.getActionRange();
       switch(target) {
       case 'vehicle':
         vue.trackTypeOfVehicle = typeSwitch[vue.trackTypeOfVehicle];
-        vue.drawTrackPath(startPoint, endPoint);
+        vue.drawTrackPath(startPointList, endPointList);
         break;
       case 'driver':
         vue.trackTypeOfDriver = typeSwitch[vue.trackTypeOfDriver];
-        vue.drawTrackPath(startPoint, endPoint);
+        vue.drawTrackPath(startPointList, endPointList);
         break;
       default:
         return;
@@ -219,7 +236,6 @@ export default {
     getInfoWindowContent(trackInfo){
       const vue = this;
       let velocity = [];
-      // console.log('velocity in track', trackInfo);
       if (trackInfo.velocity) {
         velocity=[
           '<div style="display:flex;padding-top:4px;"><div style="width:60px;text-align:left;font-size:12px">速度</div><span style="font-size:12px">',
