@@ -63,7 +63,8 @@ const codeMap = {
 };
 const districtMap = {};
 const getKeyOfPoint = mapBase.getKeyOfPoint;
-const drawDistrict = (amap, container, point, options={}) => {
+const drawDistrict = (amap, container, pointList=[], options={}) => {
+  const point = pointList.slice(0, 2);
   const key = getKeyOfPoint(point);
   return new Promise((resolve, reject) => {
     return new amap.Geocoder().getAddress(new amap.LngLat(...point), (status, result) => {
@@ -94,7 +95,8 @@ const drawDistrict = (amap, container, point, options={}) => {
   });
 };
 const circleMap = {};
-const drawCircle = (amap, container, point, options={}) => {
+const drawCircle = (amap, container, pointList, options={}) => {
+  const point = pointList.slice(0, 2);
   const key = getKeyOfPoint(point);
   if(circleMap[key]) {
     container.remove(circleMap[key]);
@@ -110,30 +112,38 @@ const drawCircle = (amap, container, point, options={}) => {
 };
 
 const markerMap = {};
-const drawMarker = (amap, container, point, options={},prefix="") => {
-  const key = `${prefix}${getKeyOfPoint(point)}`;
-  if(markerMap[key]){
-    container.remove(markerMap[key]);
-  };
-  const [w, h] = options.size;
-  const pointIcon = new amap.Icon({
-    image: options.image, size: new amap.Size(w, h), imageSize:new amap.Size(w, h),
+const drawMarker = (amap, container, pointList, options={},prefix="") => {
+  const reorgPointList = pointList.reduce((sum, cur, idx, arr) => {
+    if(idx % 2 == 0) {
+      const point = [cur, arr[idx+1]];
+      sum.push(point);
+    }
+    return sum;
+  }, []).map(point => {
+    const key = `${prefix}${getKeyOfPoint(point)}`;
+    if(markerMap[key]){
+      container.remove(markerMap[key]);
+    };
+    const [w, h] = options.size;
+    const pointIcon = new amap.Icon({
+      image: options.image, size: new amap.Size(w, h), imageSize:new amap.Size(w, h),
+    });
+    const [xo, yo] = options.offset;
+    const pointMarker = new amap.Marker({
+      position: point.slice(),
+      offset: new amap.Pixel(xo, yo),
+      icon:pointIcon,
+      autoRotation:true, 
+      angle:0, extData:key,
+    });
+    // console.log('drawMarker cache', key, pointMarker, point);
+    markerMap[key] = pointMarker;
+    container.add(pointMarker);
+    return pointMarker;
   });
-  const [xo, yo] = options.offset;
-  const pointMarker = new amap.Marker({
-    position: point.slice(),
-    offset: new amap.Pixel(xo, yo),
-    icon:pointIcon,
-    autoRotation:true, 
-    angle:0, extData:key,
-  });
-  // console.log('drawMarker cache', key, pointMarker, point);
-  markerMap[key] = pointMarker;
-  container.add(pointMarker);
-  return pointMarker;
 };
-const drawPoint = (amap, container, point, pointRule, distance) => {
-  const drawTask = pointRule(distance).map(ruleOptions => {
+const drawPoint = (amap, container, point, drawPointRule, distance) => {
+  const drawTask = drawPointRule(distance).map(ruleOptions => {
     switch(ruleOptions.type) {
       case "province":
       case "city":
@@ -189,7 +199,7 @@ const renderTheAction = (vue, startPointList=[], endPointList=[]) => {
         size:[41, 62],
         offset:[-21 + xoff, -61],
       }, 'start');
-    });
+    }).flat();
     const endMarkerDrawingList = endPointList.filter(hasGeoAxisFilter).map(endPoint => {
       const geoAxis = [endPoint.lng, endPoint.lat];
       const key = getKeyOfPoint(geoAxis);
@@ -202,12 +212,12 @@ const renderTheAction = (vue, startPointList=[], endPointList=[]) => {
         size:[41, 62],
         offset:[-21 + xoff, -61],
       }, 'end');
-    });
+    }).flat();
     return Promise.all(startMarkerDrawingList.concat(endMarkerDrawingList));
   });
 };
 const findDriverActionList = (driverOperateList=[], type=-1) => {
-  return driverOperateList.filter(ele => ele.operateTypeLm == type).map(ele => {
+  return driverOperateList.filter(ele => ele.operateTypeLm == type || type[ele.operateTypeLm]).map(ele => {
     return Object.assign({}, ele, {
       lng:ele.operateLon, lat:ele.operateLat,
     });

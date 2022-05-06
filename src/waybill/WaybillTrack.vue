@@ -70,7 +70,10 @@ export default {
     isRunning:{ type:Boolean, default:false, },
     emitLastPosition:Boolean,
     pointDensity: { type: Number, default: 30 },
-    trackUnionLine: Boolean
+    trackUnionLine: Boolean,
+    loadActionType: { type: [Number, String, Object], default:2 },
+    unloadActionType: { type: [Number, String, Object], default:3 },
+    avoid:Array,
   },
   data(){
     const uuid = simpleUUIdv4.uuid();
@@ -85,7 +88,7 @@ export default {
       trackTypeOfDriver:'primary',
       trackPath:{},
       focusedPoint:null,
-    } 
+    };
   },
   computed:{
     disablePlayTrack() {
@@ -134,8 +137,8 @@ export default {
     getActionRange(){
       const vue = this;
       const driverAction = vue.trackInfo && vue.trackInfo.driverOperate;
-      const startPointList = mapUtils.loadUnload.findDriverActionList(driverAction, 2);
-      const endPointList = mapUtils.loadUnload.findDriverActionList(driverAction, 3);
+      const startPointList = mapUtils.loadUnload.findDriverActionList(driverAction, vue.loadActionType);
+      const endPointList = mapUtils.loadUnload.findDriverActionList(driverAction, vue.unloadActionType);
       return [startPointList, endPointList];
     },
     drawTrackAll() {
