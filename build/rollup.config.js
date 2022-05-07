@@ -9,9 +9,13 @@ import { uglify } from 'rollup-plugin-uglify';
 
 export default {
   input: 'src/wrapper.js',
+  external:['simple-uuidv4'],
   output: {
     name: 'DayiWidget',
     exports: 'named',
+  },
+  globals:{
+    "simple-uuidv4":'simpleUUIdv4',
   },
   plugins:[
     css(),
