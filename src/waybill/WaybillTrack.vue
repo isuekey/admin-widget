@@ -28,11 +28,14 @@
         <el-button v-if="showDriverTrack" type="default" size="mini" @click="moveToEnd('driver')">司机实时位置</el-button>
       </div>
     </div>
-    <div class="track-playing">
-      <div class="flex-row">
-        
+    <div class="track-playing" v-show="showPlayTrackController">
+      <div class="flex-row track-control">
+        <span @click="resumePlaying" v-show="playingStatus == 'pause'" class="control-resume">&nbsp;</span>
+        <span @click="pausePlaying" v-show="playingStatus == 'playing'" class="control-pause">&nbsp;</span>
+        <span @click="stopPlaying" v-show="playingStatus != 'stop'" class="control-stop">&nbsp;</span>
       </div>
-      <div class="flex-row">
+      <div class="flex-row" v-if="false">
+        <input type="range" ref="playTrackProgressController"></input>
       </div>
     </div>
   </div>
@@ -88,6 +91,9 @@ export default {
       trackTypeOfDriver:'primary',
       trackPath:{},
       focusedPoint:null,
+      playingTrack:false,
+      playingStatus:'stop',
+      lorryMarker:null,
     };
   },
   computed:{
@@ -111,6 +117,11 @@ export default {
     showVehicleTrack(){
       const vue = this;
       return (vue.showTrackType & mapUtils.base.glossary.pathType.vehicle);
+    },
+    showPlayTrackController() {
+      const vue = this;
+      if(vue.disablePlayTrack) return false;
+      return vue.playingTrack;
     },
     driverActive() {
       const vue = this;
@@ -193,6 +204,7 @@ export default {
     },
     listenClickPlayback(){
       const vue = this;
+      vue.playingTrack = true;
       vue.handlePlayback().catch(err => {
         console.log('err', err);
       });
@@ -204,21 +216,56 @@ export default {
       const willMoveDriver = vue.showDriverTrack && vue.driverActive;
       const willMoveVehicle = vue.showVehicleTrack && vue.vehicleActive;
       const willMoveOnUnion = vue.showUnionTrack || (willMoveDriver && willMoveVehicle);
+      const defineLorryMarker = (lorryMarker) => {
+        vue.lorryMarker = lorryMarker;
+        lorryMarker.show();
+        vue.playingStatus = 'playing';
+      };
       if (willMoveOnUnion) {
         return mapUtils.tracking.getValidPathArray(vue, realtime).then((paths) => {
-          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);
-        });
+          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType, vue.handleAlongPlaying, vue.handleStopPlaying);
+        }).then(defineLorryMarker);
       } else if (willMoveDriver) {
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin == mapUtils.base.glossary.pointType.app)).then((paths) => {
-          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);
-        });
+          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType, vue.handleAlongPlaying, vue.handleStopPlaying);
+        }).then(defineLorryMarker);
       } else if (willMoveVehicle) {
         return mapUtils.tracking.getValidPathArray(vue, realtime.filter(ele => ele.origin != mapUtils.base.glossary.pointType.app)).then((paths) => {
-          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType);
-        });
+          return mapUtils.tracking.drawLorryMove(vue, paths, vue.vehicleType, vue.handleAlongPlaying, vue.handleStopPlaying);
+        }).then(defineLorryMarker);
       } else {
         return Promise.reject('未知的操作类型');
       }
+    },
+    resumePlaying() {
+      const vue = this;
+      if(!vue.lorryMarker) return;
+      vue.playingStatus = 'playing';
+      vue.lorryMarker.resumeMove();
+    },
+    pausePlaying() {
+      const vue = this;
+      if(!vue.lorryMarker) return;
+      vue.lorryMarker.pauseMove();
+      vue.playingStatus = 'pause';
+    },
+    stopPlaying() {
+      const vue = this;
+      if(!vue.lorryMarker) return;
+      vue.lorryMarker.stopMove();
+      vue.lorryMarker.hide();
+      vue.playingStatus = '';
+      vue.playingTrack = false;
+    },
+    handleStopPlaying(event) {
+      const vue = this;
+      if(!vue.lorryMarker) return;
+      // vue.playingStatus = 'stop';
+      console.log('stop event', event);
+    },
+    handleAlongPlaying(event) {
+      const vue = this;
+      // console.log('along event', event);
     },
     changeTrack(target){
       const vue = this;
@@ -286,7 +333,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .track-amap-container {
   flex: 1;
   width: 100%;
@@ -385,5 +432,33 @@ export default {
   background-color: #409EFF18;
   border-color: #409EFF00;
   box-shadow: unset;
+}
+
+.track-playing {
+  background: transparent;
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
+.track-control {
+  min-width:100px;
+  justify-content: space-evenly;
+}
+.track-control > span {
+  display:inline-block;
+  height:14px;
+  width:14px;
+  background-size:contain;
+  background-repeat:no-repeat;
+}
+.control-resume {
+  background: url("assets/control-resume.svg");
+
+}
+.control-pause {
+  background: url("assets/control-pause.svg");
+}
+.control-stop {
+  background: url("assets/control-stop.svg");
 }
 </style>

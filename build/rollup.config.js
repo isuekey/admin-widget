@@ -13,9 +13,9 @@ export default {
   output: {
     name: 'DayiWidget',
     exports: 'named',
-  },
-  globals:{
-    "simple-uuidv4":'simpleUUIdv4',
+    globals:{
+      "simple-uuidv4":'simpleUUIdv4',
+    },
   },
   plugins:[
     css(),

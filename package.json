@@ -1,7 +1,7 @@
 {
   "name": "dayi-admin-widget",
   "version": "0.2.2",
-  "description": "基于el-ui处理的vue组件库",
+  "description": "基于el-ui处理的vuejs2组件库",
   "main": "dist/dayi-widget.umd.js",
   "module": "dist/dayi-widget.esm.js",
   "unpkg": "dist/dayi-widget.min.js",

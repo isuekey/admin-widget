@@ -21,7 +21,7 @@ export default {
     ratioStyle() {
       const vue = this;
       return {
-        'padding-bottom': `${vue.ratio * 100}%`,
+        ['padding-bottom']: `${vue.ratio * 100}%`,
       };
     },
   }

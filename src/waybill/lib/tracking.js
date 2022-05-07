@@ -272,7 +272,7 @@ const shinningTheMarker = (marker) => {
   shinningMap.set(marker, interval);
 };
 const lorryMap = new WeakMap();
-const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
+const prepareLorryMarker = (vue, passPointArray=[], type="lorry", alongHandle, endHandle) => {
   if(passPointArray.length == 0) {
     return Promise.reject('缺少途径轨迹坐标');
   }
@@ -295,6 +295,9 @@ const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
         offset: new (Function.prototype.bind.apply(amap.Pixel,[amap.Pixel, ...config.offset])),
         extData:type,
       });
+      lorryMarker.on('moving', function(event) {
+        alongHandle && alongHandle.apply && alongHandle.call(vue, event);
+      });
       lorryMarker.on('movealong', function(event){
         if(vue.isRunning) {
           shinningTheMarker(lorryMarker);
@@ -315,6 +318,7 @@ const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
             infoWindow.setPosition(position);
           }
         });
+        endHandle && endHandle.apply && endHandle.call(vue, event);
       });
       container.add(lorryMarker);
       lorryMarker.show();
@@ -323,8 +327,8 @@ const prepareLorryMarker = (vue, passPointArray=[], type="lorry") => {
     return [lorryMarker, amap, container, position];
   });
 };
-const drawLorryMove = (vue, passPointArray=[], type="lorry") => {
-  return prepareLorryMarker(vue, passPointArray, type).then(([lorryMarker, amap, container, position]) => {
+const drawLorryMove = (vue, passPointArray=[], type="lorry",alongHandle,  endHandle) => {
+  return prepareLorryMarker(vue, passPointArray, type, alongHandle, endHandle).then(([lorryMarker, amap, container, position]) => {
     clearShinning(lorryMarker);
     lorryMarker.stopMove();
     let resolution = container.getResolution(position);
