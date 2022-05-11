@@ -49,6 +49,8 @@ export default {
     amap: null,
     loadPoint:Array,
     unloadPoint:Array,
+    loadRule:Function,
+    unloadRule:Function,
     showTrackType:{
       type: Number, default: mapUtils.base.glossary.pathType.full
     },
