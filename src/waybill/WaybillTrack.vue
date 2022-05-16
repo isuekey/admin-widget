@@ -30,9 +30,9 @@
     </div>
     <div class="track-playing" v-show="showPlayTrackController">
       <div class="flex-row track-control">
-        <span @click="resumePlaying" v-show="playingStatus == 'pause'" class="control-resume">&nbsp;</span>
-        <span @click="pausePlaying" v-show="playingStatus == 'playing'" class="control-pause">&nbsp;</span>
-        <span @click="stopPlaying" v-show="playingStatus != 'stop'" class="control-stop">&nbsp;</span>
+        <span @click="resumePlaying" v-show="playingStatus == 'pause'"><resume /></span>
+        <span @click="pausePlaying" v-show="playingStatus == 'playing'"><pause /></span>
+        <span @click="stopPlaying" v-show="playingStatus != 'stop'"><stop /></span>
       </div>
       <div class="flex-row" v-if="false">
         <input type="range" ref="playTrackProgressController"></input>
@@ -44,12 +44,18 @@
 <script>
 import * as simpleUUIdv4 from 'simple-uuidv4';
 import * as mapUtils from './lib/map.utils.js';
+import Pause from './components/Pause.vue';
+import Resume from './components/Resume.vue';
+import Stop from './components/Stop.vue';
 const typeSwitch = {
   primary:'info', info:'primary'
 };
 const deviceMapping = mapUtils.base.glossary.deviceMapping;
 export default {
   name:'WaybillTrack',
+  components: {
+    Pause, Resume, Stop,
+  },
   props: {
     trackInfo: { type: Object, default() { return {}; }, },
     baseInfo: { type: Object, default() { return {}; }, },
@@ -77,6 +83,7 @@ export default {
     loadActionType: { type: [Number, String, Object], default:2 },
     unloadActionType: { type: [Number, String, Object], default:3 },
     avoid:Array,
+    showPlayControlPanel: Boolean,
   },
   data(){
     const uuid = simpleUUIdv4.uuid();
@@ -121,7 +128,7 @@ export default {
     showPlayTrackController() {
       const vue = this;
       if(vue.disablePlayTrack) return false;
-      return vue.playingTrack;
+      return vue.playingTrack && vue.showPlayControlPanel;
     },
     driverActive() {
       const vue = this;
@@ -333,7 +340,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .track-amap-container {
   flex: 1;
   width: 100%;
@@ -450,15 +457,5 @@ export default {
   width:14px;
   background-size:contain;
   background-repeat:no-repeat;
-}
-.control-resume {
-  background: url("assets/control-resume.svg");
-
-}
-.control-pause {
-  background: url("assets/control-pause.svg");
-}
-.control-stop {
-  background: url("assets/control-stop.svg");
 }
 </style>
