@@ -84,6 +84,7 @@ export default {
     unloadActionType: { type: [Number, String, Object], default:3 },
     avoid:Array,
     showPlayControlPanel: Boolean,
+    getInfoWindowContentDom: Function,
   },
   data(){
     const uuid = simpleUUIdv4.uuid();
