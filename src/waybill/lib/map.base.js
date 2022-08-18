@@ -44,7 +44,7 @@ const glossary = {
 
 const keyOfPointHandler = {
   defaultKeyOfPoint: (point, prefix='', suffix="")=>{
-    const key =[prefix, point[0].toFixed(4), point[1].toFixed(4), suffix].filter(ele => !!ele).join('/');
+    const key =[prefix, (point[0]*1).toFixed(4), (point[1]*1).toFixed(4), suffix].filter(ele => !!ele).join('/');
     return key;
   }
 };
