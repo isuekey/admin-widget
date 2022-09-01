@@ -294,6 +294,9 @@ export default {
     getInfoWindowContent(trackInfo){
       const vue = this;
       let velocity = [];
+      if(vue.getInfoWindowContentDom && vue.getInfoWindowContentDom.call) {
+        return vue.getInfoWindowContentDom(trackInfo);
+      }
       if (trackInfo.velocity) {
         velocity=[
           '<div style="display:flex;padding-top:4px;"><div style="width:60px;text-align:left;font-size:12px">速度</div><span style="font-size:12px">',
