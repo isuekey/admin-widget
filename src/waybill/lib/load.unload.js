@@ -220,6 +220,7 @@ const findDriverActionList = (driverOperateList=[], type=-1) => {
   return driverOperateList.filter(ele => ele.operateTypeLm == type || type[ele.operateTypeLm]).map(ele => {
     return Object.assign({}, ele, {
       lng:ele.operateLon, lat:ele.operateLat,
+      "$type":ele.operateTypeLm,
     });
   });
 };

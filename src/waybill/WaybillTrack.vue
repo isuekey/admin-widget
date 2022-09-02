@@ -85,6 +85,7 @@ export default {
     avoid:Array,
     showPlayControlPanel: Boolean,
     getInfoWindowContentDom: Function,
+    otherActionType: [Number, String, Object], 
   },
   data(){
     const uuid = simpleUUIdv4.uuid();
@@ -158,12 +159,13 @@ export default {
       const driverAction = vue.trackInfo && vue.trackInfo.driverOperate;
       const startPointList = mapUtils.loadUnload.findDriverActionList(driverAction, vue.loadActionType);
       const endPointList = mapUtils.loadUnload.findDriverActionList(driverAction, vue.unloadActionType);
-      return [startPointList, endPointList];
+      const otherPointList = mapUtils.loadUnload.findDriverActionList(driverAction, vue.unloadActionType);
+      return [startPointList, endPointList, otherPointList];
     },
     drawTrackAll() {
       const vue = this;
       mapUtils.loadUnload.renderTheRoute(vue).then(ok => {
-        const [startPointList, endPointList] = vue.getActionRange();
+        const [startPointList, endPointList, otherPointList] = vue.getActionRange();
         return Promise.all([mapUtils.loadUnload.renderTheAction(vue, startPointList, endPointList), startPointList, endPointList, vue.containerResolve]);
       }).then(([ok, startPointList, endPointList, container]) => {
         if(!vue._handleDrawPassPoint) {
