@@ -120,7 +120,7 @@ const drawMarker = (amap, container, pointList, options={},prefix="") => {
     }
     return sum;
   }, []).map(point => {
-    const key = `${prefix}${getKeyOfPoint(point)}`;
+    const key = `${prefix}/${getKeyOfPoint(point)}`;
     if(markerMap[key]){
       container.remove(markerMap[key]);
     };
@@ -180,40 +180,38 @@ const renderTheRoute = (vue) => {
   });
 };
 
-const renderTheAction = (vue, startPointList=[], endPointList=[]) => {
+const renderTheAction = (vue, startPointList=[], endPointList=[], otherPointList=[]) => {
   return mapBase.prepareMap(vue).then(ok => {
     return Promise.all([vue.amapResolve, vue.containerResolve]);
   }).then(([amap, container]) => {
     const actionMarkerKeySet = {};
     let xoff = 0;
-    const hasGeoAxisFilter = ele => !!ele.lng && !!ele.lat;
-    const startMarkerDrawingList = startPointList.filter(hasGeoAxisFilter).map(startPoint => {
-      const geoAxis = [startPoint.lng, startPoint.lat];
+    const hasGeoAxisFilter = ele => {
+      return !!ele.lng && !!ele.lat;
+    };
+    const pointMapper = (markerImage) => (point) => {
+      const geoAxis = [point.lng, point.lat];
       const key = getKeyOfPoint(geoAxis);
+      console.log('has duplicate', key, point);
       if(actionMarkerKeySet[key]) {
         xoff += 10;
       }
       actionMarkerKeySet[key] = true;
-      return drawMarker(amap, container, geoAxis, {
-        image: loadActionMarker,
+      return drawMarker(amap, container, geoAxis, Object.assign({
         size:[41, 62],
         offset:[-21 + xoff, -61],
-      }, 'start');
-    }).flat();
-    const endMarkerDrawingList = endPointList.filter(hasGeoAxisFilter).map(endPoint => {
-      const geoAxis = [endPoint.lng, endPoint.lat];
-      const key = getKeyOfPoint(geoAxis);
-      if(actionMarkerKeySet[key]) {
-        xoff += 10;
-      };
-      actionMarkerKeySet[key] = true;
-      return drawMarker(amap, container, [endPoint.lng, endPoint.lat], {
-        image: unloadActionMarker,
-        size:[41, 62],
-        offset:[-21 + xoff, -61],
-      }, 'end');
-    }).flat();
-    return Promise.all(startMarkerDrawingList.concat(endMarkerDrawingList));
+      }, markerImage(point)), point.$type);
+    };
+    const startMapper = pointMapper(()=>({image:loadActionMarker}));
+    const startMarkerDrawingList = startPointList.filter(hasGeoAxisFilter).map(startMapper).flat();
+    const endMapper = pointMapper(()=>({image:unloadActionMarker}));
+    const endMarkerDrawingList = endPointList.filter(hasGeoAxisFilter).map(endMapper).flat();
+    const otherMapper = pointMapper((point) => vue.otherActionType[point.$type](point));
+    const otherMarkerDrawingList = otherPointList.filter(hasGeoAxisFilter).map(otherMapper).flat();
+    return Promise.all(startMarkerDrawingList.concat(endMarkerDrawingList).concat(otherMarkerDrawingList)).catch(err => {
+      console.log('err', err);
+      return Promise.reject(err);
+    });
   });
 };
 const findDriverActionList = (driverOperateList=[], type=-1) => {
