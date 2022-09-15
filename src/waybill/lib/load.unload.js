@@ -191,8 +191,8 @@ const renderTheAction = (vue, startPointList=[], endPointList=[], otherPointList
     };
     const pointMapper = (markerImage) => (point) => {
       const geoAxis = [point.lng, point.lat];
-      const key = getKeyOfPoint(geoAxis);
-      console.log('has duplicate', key, point);
+      const key = getKeyOfPoint(geoAxis, '', '', 20);
+      // console.log('has duplicate', key, point);
       if(actionMarkerKeySet[key]) {
         xoff += 10;
       }

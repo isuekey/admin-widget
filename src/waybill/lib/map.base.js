@@ -43,8 +43,8 @@ const glossary = {
 };
 
 const keyOfPointHandler = {
-  defaultKeyOfPoint: (point, prefix='', suffix="")=>{
-    const key =[prefix, (point[0]*1).toFixed(4), (point[1]*1).toFixed(4), suffix].filter(ele => !!ele).join('/');
+  defaultKeyOfPoint: (point, prefix='', suffix="", step=10)=>{
+    const key =[prefix, (point[0]*100000/step).toFixed(0), (point[1]*100000/step).toFixed(0), suffix].filter(ele => !!ele).join('/');
     return key;
   }
 };
@@ -52,8 +52,8 @@ const setKeyOfPointGenerator = (other=keyOfPointHandler.defaultKeyOfPoint) => {
   keyOfPointHandler.handler = other;
 };
 setKeyOfPointGenerator();
-const getKeyOfPoint = (point, prefix, suffix ) => {
-  return keyOfPointHandler.handler(point, prefix, suffix);
+const getKeyOfPoint = (point, prefix, suffix, step=10 ) => {
+  return keyOfPointHandler.handler(point, prefix, suffix, step);
 };
 export {
   prepareMap,
