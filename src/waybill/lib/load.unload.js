@@ -163,13 +163,16 @@ const drawPoint = (amap, container, point, drawPointRule, distance) => {
 const zoomMap = (amap, container, avoid=[20, 20, 20, 20]) => {
   container.setFitView(null, true, avoid, 18);
 };
-
+const isNotUndefined = ele => typeof ele != 'undefined';
 const renderTheRoute = (vue) => {
   return mapBase.prepareMap(vue).then(ok => {
     return Promise.all([vue.amapResolve, vue.containerResolve]);
   }).then(([amap, container]) => {
     const ld = (vue.loadPoint || vue.unloadPoint || tian_an_men).slice();
     const un = (vue.unloadPoint || vue.loadPoint || tian_an_men).slice();
+    if(ld.filter(isNotUndefined).length < 2 || un.filter(isNotUndefined).length < 2 ){
+      return Promise.all([amap, container]);
+    }
     const distance = (vue.trackInfo && vue.trackInfo.realDistance) || amap.GeometryUtil.distance(ld, un);
     // console.log('distance in admin-widget', distance);
     const drawLoad = vue.loadPoint && drawPoint(amap, container, vue.loadPoint.slice(), vue.loadRule || defaultLoadRule, distance) || [void 0, void 0];
