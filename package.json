@@ -12,7 +12,6 @@
   "repository": "git@git.da156.cn:liuhanru/admin-widget.git",
   "author": "liuhanru <isuekey@163.com>",
   "license": "MIT",
-  "private": false,
   "scripts": {
     "build": "yarn build:umd; yarn build:es; yarn build:unpkg",
     "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/dayi-widget.umd.js",

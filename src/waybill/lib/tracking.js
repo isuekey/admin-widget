@@ -222,6 +222,7 @@ const removePassPoint = (vue, category='lines') => {
   });
 };
 const getDistance = (point, prePoint, amap) => {
+  if (!point) return 0;
   if (!prePoint) return 0;
   const distance = amap.GeometryUtil.distance(
     [point.lng, point.lat],
